@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>ProjectJEHV Tracker | Push Pull Legs & Cardio</title>
   
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23020617' rx='20'/%3E%3Cpath d='M30 25 L45 25 L45 55 L30 55 Z M55 25 L75 25 L75 37 L65 37 L65 43 L75 43 L75 55 L55 55 Z M40 60 L60 60 L50 78 Z' fill='%2322c55e' filter='drop-shadow(0 0 6px %234ade80)'/%3E%3C/svg%3E" />
@@ -32,8 +32,8 @@
   <style>
     /* Custom sleek scrollbars */
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 4px;
+      height: 4px;
     }
     ::-webkit-scrollbar-track {
       background: #020617;
@@ -52,330 +52,355 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+    /* Smooth touch tap highlights */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
   </style>
 </head>
 
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-white pb-20 md:pb-6">
 
-  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3">
-    <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/90 px-3 py-2.5 sm:px-4 sm:py-3">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
       
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-slate-950 border border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/20 relative overflow-hidden group">
-          <svg viewBox="0 0 100 100" class="w-7 h-7 fill-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-950 border border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
+          <svg viewBox="0 0 100 100" class="w-6 h-6 sm:w-7 sm:h-7 fill-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]">
             <path d="M26 22 L44 22 L44 54 L26 54 Z" />
             <path d="M52 22 L76 22 L76 34 L62 34 L62 40 L74 40 L74 54 L52 54 Z" />
             <path d="M38 60 L64 60 L51 80 Z" />
           </svg>
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="font-bold text-lg tracking-tight text-white">ProjectJEHV <span class="text-emerald-400 font-semibold text-sm">Tracker</span></h1>
-            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <h1 class="font-bold text-base sm:text-lg tracking-tight text-white leading-none">ProjectJEHV</h1>
+            <span class="text-[9px] sm:text-[10px] uppercase font-extrabold tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
               PPL Live
             </span>
           </div>
-          <p class="text-xs text-slate-400 hidden sm:block">Push · Pull · Legs · Cardio · Auto Persistent</p>
+          <p class="text-[10px] sm:text-xs text-slate-400 font-medium mt-0.5">Workout & Cardio Tracker</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3">
-        <div id="header-active-indicator" class="hidden cursor-pointer flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium animate-pulse" onclick="switchTab('active')">
-          <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
-          <span>Active: <span id="header-timer-text" class="font-mono">00:00</span></span>
+      <div class="flex items-center gap-2">
+        <div id="header-active-indicator" class="hidden cursor-pointer flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium animate-pulse" onclick="switchTab('active')">
+          <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span class="text-[11px]"><span id="header-timer-text" class="font-mono font-bold">00:00</span></span>
         </div>
 
-        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs">
+        <div class="flex items-center gap-1.5 px-2 py-1 sm:px-2.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          <span class="text-[11px] font-mono text-slate-400 hidden md:inline">Storage: Saved</span>
+          <span class="text-[10px] sm:text-[11px] font-mono text-slate-300">Saved</span>
           <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
         </div>
       </div>
     </div>
 
-    <div class="max-w-6xl mx-auto mt-3 flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 border-t border-slate-800/80 pt-2">
-      <button onclick="switchTab('active')" id="tab-btn-active" class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20">
+    <div class="max-w-6xl mx-auto mt-2.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 border-t border-slate-800/80 pt-2 text-xs">
+      <button onclick="switchTab('active')" id="tab-btn-active" class="nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20">
         <i data-lucide="activity" class="w-4 h-4"></i>
-        <span>Today's Workout</span>
+        <span>Workout</span>
       </button>
 
-      <button onclick="switchTab('planner')" id="tab-btn-planner" class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+      <button onclick="switchTab('planner')" id="tab-btn-planner" class="nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
         <i data-lucide="calendar" class="w-4 h-4"></i>
-        <span>Weekly Split Plan</span>
+        <span>Split Plan</span>
       </button>
 
-      <button onclick="switchTab('cardio')" id="tab-btn-cardio" class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+      <button onclick="switchTab('cardio')" id="tab-btn-cardio" class="nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
         <i data-lucide="footprints" class="w-4 h-4"></i>
-        <span>Run & Cardio</span>
+        <span>Run Tracker</span>
       </button>
 
-      <button onclick="switchTab('history')" id="tab-btn-history" class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+      <button onclick="switchTab('history')" id="tab-btn-history" class="nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
         <i data-lucide="clock" class="w-4 h-4"></i>
-        <span>History & Logs (<span id="history-count">0</span>)</span>
+        <span>Logs (<span id="history-count">0</span>)</span>
       </button>
 
-      <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+      <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
         <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
-        <span>Analytics & PRs</span>
+        <span>Analytics</span>
       </button>
 
-      <button onclick="switchTab('exercises')" id="tab-btn-exercises" class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+      <button onclick="switchTab('exercises')" id="tab-btn-exercises" class="nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800">
         <i data-lucide="layers" class="w-4 h-4"></i>
-        <span>Exercise Library</span>
+        <span>Library</span>
       </button>
     </div>
   </header>
 
-  <div id="rest-timer-bar" class="hidden sticky top-[108px] z-30 bg-gradient-to-r from-cyan-950 via-slate-900 to-blue-950 border-y border-cyan-500/40 px-4 py-2.5 shadow-xl flex items-center justify-between text-white text-xs">
-    <div class="flex items-center gap-3">
-      <div class="w-7 h-7 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center font-bold">
-        <i data-lucide="timer" class="w-4 h-4 animate-spin"></i>
+  <div id="rest-timer-bar" class="hidden sticky top-[92px] sm:top-[104px] z-30 bg-gradient-to-r from-cyan-950 via-slate-900 to-blue-950 border-y border-cyan-500/40 px-3 py-2 shadow-xl flex items-center justify-between text-white text-xs">
+    <div class="flex items-center gap-2">
+      <div class="w-6 h-6 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center font-bold shrink-0">
+        <i data-lucide="timer" class="w-3.5 h-3.5 animate-spin"></i>
       </div>
       <div>
-        <span class="font-semibold text-cyan-200">Rest Timer Active:</span>
-        <span id="rest-timer-count" class="font-mono text-base font-bold text-white ml-1">60s remaining</span>
+        <span class="text-cyan-200 text-[11px] font-semibold hidden sm:inline">Rest Active:</span>
+        <span id="rest-timer-count" class="font-mono text-sm sm:text-base font-bold text-white">60s</span>
       </div>
     </div>
-    <div class="flex items-center gap-2">
-      <button onclick="adjustRestTimer(30)" class="px-2.5 py-1 bg-cyan-800 hover:bg-cyan-700 text-white rounded font-medium text-[11px]">+30s</button>
-      <button onclick="stopRestTimer()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded font-medium text-[11px]">Skip Rest</button>
+    <div class="flex items-center gap-1.5">
+      <button onclick="adjustRestTimer(30)" class="px-2.5 py-1 bg-cyan-800/80 active:bg-cyan-700 text-white rounded-lg font-bold text-[11px]">+30s</button>
+      <button onclick="stopRestTimer()" class="px-2.5 py-1 bg-slate-800 active:bg-slate-700 text-slate-200 rounded-lg font-medium text-[11px]">Skip</button>
     </div>
   </div>
 
-  <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 space-y-6">
+  <main class="flex-1 max-w-6xl w-full mx-auto p-3.5 sm:p-5 md:p-6 space-y-5">
 
-    <section id="view-active" class="space-y-6">
-      <div id="workout-launcher" class="space-y-6">
-        <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-800 rounded-2xl p-6 relative overflow-hidden shadow-xl">
-          <div class="absolute right-0 top-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <section id="view-active" class="space-y-4 sm:space-y-6">
+      <div id="workout-launcher" class="space-y-4 sm:space-y-6">
+        <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-800 rounded-2xl p-4 sm:p-6 relative overflow-hidden shadow-xl">
+          <div class="absolute right-0 top-0 w-48 sm:w-64 h-48 sm:h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
           <div class="max-w-xl space-y-2">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Tailored Push / Pull / Legs Split
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] sm:text-xs font-semibold">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Tailored Push / Pull / Legs Protocol
             </span>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Ready for Today's Training?</h2>
-            <p class="text-sm text-slate-300">
-              Select your tailored routine below. Every set, rep, and weight you log will automatically save to your permanent logs.
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">Today's Training Routine</h2>
+            <p class="text-xs sm:text-sm text-slate-300">
+              Select your tailored routine below. Every set, rep, and weight automatically syncs and saves to your local profile.
             </p>
           </div>
         </div>
 
-        <div id="routine-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+        <div id="routine-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-5"></div>
       </div>
 
-      <div id="workout-runner" class="hidden space-y-6">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-wrap items-center justify-between gap-4">
+      <div id="workout-runner" class="hidden space-y-4 sm:space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
           <div class="flex items-center gap-3">
-            <span id="active-session-icon" class="text-3xl">💥</span>
+            <span id="active-session-icon" class="text-2xl sm:text-3xl p-1.5 rounded-xl bg-slate-800 border border-slate-700">💥</span>
             <div>
               <div class="flex items-center gap-2">
-                <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 uppercase">In Progress</span>
-                <h2 id="active-session-title" class="text-xl font-bold text-white">Push Day</h2>
+                <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 uppercase">Active</span>
+                <h2 id="active-session-title" class="text-base sm:text-lg font-bold text-white leading-snug">Push Day</h2>
               </div>
-              <p id="active-session-time" class="text-xs text-slate-400 mt-0.5">Started Just Now</p>
+              <p id="active-session-time" class="text-[11px] text-slate-400">Started Just Now</p>
             </div>
           </div>
 
-          <div class="flex items-center gap-4">
-            <div class="bg-slate-800 px-4 py-2 rounded-xl border border-slate-700 text-center">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block">Session Timer</span>
-              <span id="active-session-stopwatch" class="text-xl font-mono font-extrabold text-emerald-400">00:00</span>
+          <div class="flex items-center justify-between sm:justify-end gap-2.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800/80">
+            <div class="bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 text-center">
+              <span class="text-[9px] uppercase font-semibold text-slate-400 block leading-none">Timer</span>
+              <span id="active-session-stopwatch" class="text-base sm:text-lg font-mono font-black text-emerald-400">00:00</span>
             </div>
 
             <div class="flex items-center gap-2">
-              <button onclick="toggleSessionPause()" id="btn-pause-session" class="p-2.5 rounded-xl border bg-amber-500/20 border-amber-500/40 text-amber-300 hover:bg-amber-500/30 font-bold text-xs flex items-center gap-1.5 transition-colors">
-                <i data-lucide="pause" class="w-4 h-4"></i>
+              <button onclick="toggleSessionPause()" id="btn-pause-session" class="p-2 sm:px-3 sm:py-2 rounded-xl border bg-amber-500/20 border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-1 active:scale-95 transition-transform">
+                <i data-lucide="pause" class="w-3.5 h-3.5"></i>
                 <span id="btn-pause-label">Pause</span>
               </button>
 
-              <button onclick="finishActiveWorkout()" class="py-2.5 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition-transform active:scale-95">
-                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                <span>Finish Workout</span>
+              <button onclick="finishActiveWorkout()" class="px-3.5 py-2 rounded-xl bg-emerald-500 active:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/25 active:scale-95 transition-transform">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                <span>Finish</span>
               </button>
             </div>
           </div>
         </div>
 
-        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-2 text-xs text-slate-300">
-            <i data-lucide="timer" class="w-4 h-4 text-cyan-400"></i>
-            <span class="font-semibold text-slate-200">Start Manual Rest Timer:</span>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 text-xs text-slate-300">
+            <i data-lucide="timer" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span class="text-[11px] font-semibold text-slate-300">Rest:</span>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="startRestTimer(30)" class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">30s</button>
-            <button onclick="startRestTimer(60)" class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">60s</button>
-            <button onclick="startRestTimer(90)" class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">90s</button>
-            <button onclick="startRestTimer(120)" class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">2m</button>
-            <button onclick="startRestTimer(180)" class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">3m</button>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button onclick="startRestTimer(30)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 active:bg-slate-700 text-slate-300 border border-slate-700">30s</button>
+            <button onclick="startRestTimer(60)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 active:bg-slate-700 text-slate-300 border border-slate-700">60s</button>
+            <button onclick="startRestTimer(90)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 active:bg-slate-700 text-slate-300 border border-slate-700">90s</button>
+            <button onclick="startRestTimer(120)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 active:bg-slate-700 text-slate-300 border border-slate-700">2m</button>
+            <button onclick="startRestTimer(180)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 active:bg-slate-700 text-slate-300 border border-slate-700">3m</button>
           </div>
         </div>
 
-        <div id="active-exercises-container" class="space-y-5"></div>
+        <div id="active-exercises-container" class="space-y-4"></div>
       </div>
     </section>
 
-    <section id="view-planner" class="hidden space-y-6">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-3">
+    <section id="view-planner" class="hidden space-y-4 sm:space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 class="text-xl font-extrabold text-white">Weekly Split Planning</h2>
-            <p class="text-xs text-slate-400 mt-0.5">Your scheduled Push, Pull, Leg, and Recovery cycle for maximum muscle growth and performance.</p>
+            <h2 class="text-lg sm:text-xl font-extrabold text-white">Weekly Split Planning</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Your 7-day scheduled Push, Pull, Leg, and Recovery cycle.</p>
           </div>
-          <button onclick="resetWeeklyPlan()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5">
+          <button onclick="resetWeeklyPlan()" class="px-3 py-1.5 bg-slate-800 active:bg-slate-700 text-emerald-400 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-            <span>Reset to PPL Default</span>
+            <span>Reset Split</span>
           </button>
         </div>
       </div>
-      <div id="weekly-plan-grid" class="grid grid-cols-1 md:grid-cols-7 gap-3"></div>
+      <div id="weekly-plan-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2.5 sm:gap-3"></div>
     </section>
 
-    <section id="view-cardio" class="hidden space-y-6">
-      <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-        <div class="flex flex-wrap items-center justify-between gap-4">
+    <section id="view-cardio" class="hidden space-y-4 sm:space-y-6">
+      <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-              Live Cardio Tracker
+            <span class="text-[9px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+              Live Cardio Module
             </span>
-            <h2 class="text-2xl font-extrabold text-white mt-1">Outdoor & Treadmill Run</h2>
-            <p class="text-xs text-slate-300">Live distance, stopwatch, pace calculator, and calorie burn estimation.</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-white mt-1">Outdoor & Treadmill Run</h2>
+            <p class="text-xs text-slate-300">Stopwatch, live pace calculator, and calories burned.</p>
           </div>
 
-          <div class="flex items-center gap-3">
-            <button id="btn-start-run" onclick="startRunTracker()" class="py-3 px-6 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-400 hover:to-blue-400 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-indigo-500/25 transition-transform active:scale-95">
-              <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+          <div class="flex items-center gap-2">
+            <button id="btn-start-run" onclick="startRunTracker()" class="w-full sm:w-auto py-2.5 px-5 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 active:from-indigo-400 active:to-blue-400 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i>
               <span>Start Run Session</span>
             </button>
-            <div id="run-active-actions" class="hidden flex items-center gap-2">
-              <button onclick="finishRunSession()" class="py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition-transform active:scale-95">
-                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+            <div id="run-active-actions" class="hidden flex items-center gap-2 w-full sm:w-auto">
+              <button onclick="finishRunSession()" class="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl bg-emerald-500 active:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg active:scale-95 transition-transform">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
                 <span>Save Run</span>
               </button>
-              <button onclick="cancelRunSession()" class="p-3 rounded-xl bg-slate-800 hover:bg-rose-900/40 text-rose-400 border border-slate-700 transition-colors" title="Cancel Run">
-                <i data-lucide="x" class="w-4 h-4"></i>
+              <button onclick="cancelRunSession()" class="p-2.5 rounded-xl bg-slate-800 active:bg-rose-900/40 text-rose-400 border border-slate-700" title="Cancel">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
               </button>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 text-center">
-            <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Distance</span>
-            <span id="run-metric-dist" class="text-2xl sm:text-3xl font-mono font-black text-white mt-1 block">0.00</span>
-            <span class="text-xs text-indigo-400 font-medium">kilometers</span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3 sm:p-4 text-center">
+            <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Distance</span>
+            <span id="run-metric-dist" class="text-xl sm:text-3xl font-mono font-black text-white mt-0.5 block">0.00</span>
+            <span class="text-[10px] sm:text-xs text-indigo-400 font-medium">kilometers</span>
           </div>
-          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 text-center">
-            <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Time</span>
-            <span id="run-metric-time" class="text-2xl sm:text-3xl font-mono font-black text-emerald-400 mt-1 block">00:00</span>
-            <span class="text-xs text-slate-400 font-medium">mins : secs</span>
+          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3 sm:p-4 text-center">
+            <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Time</span>
+            <span id="run-metric-time" class="text-xl sm:text-3xl font-mono font-black text-emerald-400 mt-0.5 block">00:00</span>
+            <span class="text-[10px] sm:text-xs text-slate-400 font-medium">mins : secs</span>
           </div>
-          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 text-center">
-            <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Avg Pace</span>
-            <span id="run-metric-pace" class="text-2xl sm:text-3xl font-mono font-black text-amber-400 mt-1 block">0:00</span>
-            <span class="text-xs text-slate-400 font-medium">min / km</span>
+          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3 sm:p-4 text-center">
+            <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Avg Pace</span>
+            <span id="run-metric-pace" class="text-xl sm:text-3xl font-mono font-black text-amber-400 mt-0.5 block">0:00</span>
+            <span class="text-[10px] sm:text-xs text-slate-400 font-medium">min / km</span>
           </div>
-          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 text-center">
-            <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Calories</span>
-            <span id="run-metric-cal" class="text-2xl sm:text-3xl font-mono font-black text-rose-400 mt-1 block">0</span>
-            <span class="text-xs text-slate-400 font-medium">kcal burned</span>
+          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3 sm:p-4 text-center">
+            <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Calories</span>
+            <span id="run-metric-cal" class="text-xl sm:text-3xl font-mono font-black text-rose-400 mt-0.5 block">0</span>
+            <span class="text-[10px] sm:text-xs text-slate-400 font-medium">kcal burned</span>
           </div>
         </div>
       </div>
 
-      <div class="space-y-4">
-        <h3 class="font-bold text-lg text-white flex items-center gap-2">
-          <i data-lucide="footprints" class="w-5 h-5 text-indigo-400"></i>
+      <div class="space-y-3">
+        <h3 class="font-bold text-base sm:text-lg text-white flex items-center gap-2">
+          <i data-lucide="footprints" class="w-4 h-4 text-indigo-400"></i>
           <span>Cardio Logs (<span id="run-logs-count">0</span>)</span>
         </h3>
-        <div id="cardio-logs-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        <div id="cardio-logs-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
     </section>
 
-    <section id="view-history" class="hidden space-y-6">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-wrap items-center justify-between gap-4">
+    <section id="view-history" class="hidden space-y-4 sm:space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 class="text-xl font-extrabold text-white">Workout History & Session Logs</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Full logs of every completed session with individual sets, reps, and tonnage.</p>
+          <h2 class="text-lg sm:text-xl font-extrabold text-white">Workout History Logs</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Full logs of completed sessions with sets, reps, and tonnage.</p>
         </div>
-        <button onclick="clearAllHistory()" class="px-3 py-1.5 bg-slate-800 hover:bg-rose-900/30 text-slate-400 hover:text-rose-400 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5">
+        <button onclick="clearAllHistory()" class="px-3 py-1.5 bg-slate-800 active:bg-rose-900/30 text-slate-400 hover:text-rose-400 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5">
           <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
           <span>Clear Logs</span>
         </button>
       </div>
-      <div id="history-logs-list" class="space-y-4"></div>
+      <div id="history-logs-list" class="space-y-3 sm:space-y-4"></div>
     </section>
 
-    <section id="view-analytics" class="hidden space-y-6">
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-          <span class="text-[11px] uppercase font-semibold text-slate-400 flex items-center gap-1.5">
-            <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i> Workouts
+    <section id="view-analytics" class="hidden space-y-4 sm:space-y-6">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4">
+          <span class="text-[10px] sm:text-[11px] uppercase font-semibold text-slate-400 flex items-center gap-1">
+            <i data-lucide="activity" class="w-3 h-3 text-emerald-400"></i> Workouts
           </span>
-          <span id="stat-total-workouts" class="text-2xl sm:text-3xl font-extrabold text-white mt-1 block">0</span>
-          <span class="text-xs text-slate-400 mt-1 block">Completed sessions</span>
+          <span id="stat-total-workouts" class="text-xl sm:text-3xl font-extrabold text-white mt-0.5 block">0</span>
+          <span class="text-[10px] text-slate-400 mt-0.5 block">Sessions</span>
         </div>
 
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-          <span class="text-[11px] uppercase font-semibold text-slate-400 flex items-center gap-1.5">
-            <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i> Total Volume
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4">
+          <span class="text-[10px] sm:text-[11px] uppercase font-semibold text-slate-400 flex items-center gap-1">
+            <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i> Total Vol
           </span>
-          <span id="stat-total-volume" class="text-2xl sm:text-3xl font-extrabold text-amber-400 mt-1 block">0</span>
-          <span class="text-xs text-slate-400 mt-1 block">kg total weight lifted</span>
+          <span id="stat-total-volume" class="text-xl sm:text-3xl font-extrabold text-amber-400 mt-0.5 block">0</span>
+          <span class="text-[10px] text-slate-400 mt-0.5 block">kg lifted</span>
         </div>
 
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-          <span class="text-[11px] uppercase font-semibold text-slate-400 flex items-center gap-1.5">
-            <i data-lucide="footprints" class="w-3.5 h-3.5 text-indigo-400"></i> Cardio
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4">
+          <span class="text-[10px] sm:text-[11px] uppercase font-semibold text-slate-400 flex items-center gap-1">
+            <i data-lucide="footprints" class="w-3 h-3 text-indigo-400"></i> Cardio
           </span>
-          <span id="stat-total-distance" class="text-2xl sm:text-3xl font-extrabold text-indigo-400 mt-1 block">0.0</span>
-          <span class="text-xs text-slate-400 mt-1 block">km total distance</span>
+          <span id="stat-total-distance" class="text-xl sm:text-3xl font-extrabold text-indigo-400 mt-0.5 block">0.0</span>
+          <span class="text-[10px] text-slate-400 mt-0.5 block">km total</span>
         </div>
 
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-          <span class="text-[11px] uppercase font-semibold text-slate-400 flex items-center gap-1.5">
-            <i data-lucide="trophy" class="w-3.5 h-3.5 text-yellow-400"></i> Bench Top
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4">
+          <span class="text-[10px] sm:text-[11px] uppercase font-semibold text-slate-400 flex items-center gap-1">
+            <i data-lucide="trophy" class="w-3 h-3 text-yellow-400"></i> Bench PR
           </span>
-          <span id="stat-pr-bench" class="text-2xl sm:text-3xl font-extrabold text-white mt-1 block">40 kg</span>
-          <span class="text-xs text-slate-400 mt-1 block">Flat Barbell Record</span>
+          <span id="stat-pr-bench" class="text-xl sm:text-3xl font-extrabold text-white mt-0.5 block">40 kg</span>
+          <span class="text-[10px] text-slate-400 mt-0.5 block">Flat Barbell</span>
         </div>
       </div>
 
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 class="font-bold text-lg text-white flex items-center gap-2">
-          <i data-lucide="trophy" class="w-5 h-5 text-amber-400"></i>
-          <span>Personal Records & Top Lift Resistance</span>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-3 sm:space-y-4">
+        <h3 class="font-bold text-base sm:text-lg text-white flex items-center gap-2">
+          <i data-lucide="trophy" class="w-4 h-4 text-amber-400"></i>
+          <span>Personal Records (Peak Resistance)</span>
         </h3>
-        <div id="pr-cards-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+        <div id="pr-cards-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4"></div>
       </div>
 
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 class="font-bold text-lg text-white">Muscle Group & Split Distribution</h3>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-3 sm:space-y-4">
+        <h3 class="font-bold text-base sm:text-lg text-white">Split Distribution</h3>
         <div id="split-distribution-bars" class="space-y-3"></div>
       </div>
     </section>
 
-    <section id="view-exercises" class="hidden space-y-6">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h2 class="text-xl font-extrabold text-white">Exercise Library & Technique Cues</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Browse your tailored exercises, target rep brackets, and optimal form cues.</p>
-        </div>
+    <section id="view-exercises" class="hidden space-y-4 sm:space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+        <h2 class="text-lg sm:text-xl font-extrabold text-white">Exercise Library & Technique Cues</h2>
+        <p class="text-xs text-slate-400 mt-0.5">Explore your tailored movements, rep brackets, and form cues.</p>
       </div>
-      <div id="exercise-library-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      <div id="exercise-library-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"></div>
     </section>
 
   </main>
 
-  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 border border-emerald-500/50 text-emerald-300 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-semibold transition-all">
+  <div id="toast" class="hidden fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 bg-slate-900 border border-emerald-500/50 text-emerald-300 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl shadow-2xl flex items-center gap-2.5 text-xs font-semibold transition-all">
     <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
     <span id="toast-text">Message</span>
   </div>
 
-  <footer class="border-t border-slate-900 bg-slate-950 px-4 py-4 text-center text-xs text-slate-500">
-    <p>ProjectJEHV Tracker · Permanent Local Storage Active</p>
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800/90 px-2 py-1.5 flex items-center justify-around">
+    <button onclick="switchTab('active')" id="mob-nav-active" class="flex flex-col items-center gap-0.5 py-1 px-2.5 text-emerald-400 font-bold transition-all">
+      <i data-lucide="activity" class="w-4 h-4"></i>
+      <span class="text-[10px]">Workout</span>
+    </button>
+    <button onclick="switchTab('planner')" id="mob-nav-planner" class="flex flex-col items-center gap-0.5 py-1 px-2.5 text-slate-400 transition-all">
+      <i data-lucide="calendar" class="w-4 h-4"></i>
+      <span class="text-[10px]">Split</span>
+    </button>
+    <button onclick="switchTab('cardio')" id="mob-nav-cardio" class="flex flex-col items-center gap-0.5 py-1 px-2.5 text-slate-400 transition-all">
+      <i data-lucide="footprints" class="w-4 h-4"></i>
+      <span class="text-[10px]">Cardio</span>
+    </button>
+    <button onclick="switchTab('history')" id="mob-nav-history" class="flex flex-col items-center gap-0.5 py-1 px-2.5 text-slate-400 transition-all">
+      <i data-lucide="clock" class="w-4 h-4"></i>
+      <span class="text-[10px]">Logs</span>
+    </button>
+    <button onclick="switchTab('analytics')" id="mob-nav-analytics" class="flex flex-col items-center gap-0.5 py-1 px-2.5 text-slate-400 transition-all">
+      <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+      <span class="text-[10px]">Analytics</span>
+    </button>
+  </nav>
+
+  <footer class="hidden md:block border-t border-slate-900 bg-slate-950 px-4 py-4 text-center text-xs text-slate-500">
+    <p>ProjectJEHV Tracker · Push Pull Legs & Mobile Responsive</p>
   </footer>
 
   <script>
-    // --- Audio Beeper Function ---
+    // Audio Beeper Function
     const playBeep = (freq = 600, duration = 0.15) => {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -392,7 +417,7 @@
       } catch (e) {}
     };
 
-    // --- Tailored Preset Templates ---
+    // Tailored Preset Templates
     const TAILORED_ROUTINES = [
       {
         id: 'push-day',
@@ -437,26 +462,23 @@
     ];
 
     const DEFAULT_WEEKLY_PLAN = [
-      { day: 'Monday', routineId: 'push-day', routineTitle: 'Push Day', focus: 'Chest, Shoulders & Triceps', rest: false },
-      { day: 'Tuesday', routineId: 'pull-day', routineTitle: 'Pull Day', focus: 'Back, Lat Width & Biceps', rest: false },
-      { day: 'Wednesday', routineId: 'leg-day', routineTitle: 'Leg Day', focus: 'Quads, Hamstrings & Calves', rest: false },
-      { day: 'Thursday', routineId: 'rest', routineTitle: 'Active Recovery / Run', focus: 'Light Cardio & Mobility', rest: true },
-      { day: 'Friday', routineId: 'push-day', routineTitle: 'Push Day 2', focus: 'Chest & Shoulder Hypertrophy', rest: false },
-      { day: 'Saturday', routineId: 'pull-day', routineTitle: 'Pull Day 2', focus: 'Upper Back & Arm Superset', rest: false },
-      { day: 'Sunday', routineId: 'rest', routineTitle: 'Full Rest Day', focus: 'Sleep, Nutrition & Regeneration', rest: true }
+      { day: 'Mon', fullDay: 'Monday', routineId: 'push-day', routineTitle: 'Push Day', focus: 'Chest, Shoulders & Triceps', rest: false },
+      { day: 'Tue', fullDay: 'Tuesday', routineId: 'pull-day', routineTitle: 'Pull Day', focus: 'Back, Lat Width & Biceps', rest: false },
+      { day: 'Wed', fullDay: 'Wednesday', routineId: 'leg-day', routineTitle: 'Leg Day', focus: 'Quads, Hamstrings & Calves', rest: false },
+      { day: 'Thu', fullDay: 'Thursday', routineId: 'rest', routineTitle: 'Active Recovery', focus: 'Light Cardio & Mobility', rest: true },
+      { day: 'Fri', fullDay: 'Friday', routineId: 'push-day', routineTitle: 'Push Day 2', focus: 'Chest & Shoulder Volume', rest: false },
+      { day: 'Sat', fullDay: 'Saturday', routineId: 'pull-day', routineTitle: 'Pull Day 2', focus: 'Upper Back & Arm Superset', rest: false },
+      { day: 'Sun', fullDay: 'Sunday', routineId: 'rest', routineTitle: 'Full Rest Day', focus: 'Sleep & Regeneration', rest: true }
     ];
 
-    // --- LocalStorage Keys ---
     const STORAGE_KEY_WORKOUTS = 'projectjevh_workouts_v1';
     const STORAGE_KEY_RUNS = 'projectjevh_runs_v1';
     const STORAGE_KEY_PLAN = 'projectjevh_plan_v1';
 
-    // State
     let workouts = JSON.parse(localStorage.getItem(STORAGE_KEY_WORKOUTS)) || [];
     let runs = JSON.parse(localStorage.getItem(STORAGE_KEY_RUNS)) || [];
     let weeklyPlan = JSON.parse(localStorage.getItem(STORAGE_KEY_PLAN)) || DEFAULT_WEEKLY_PLAN;
 
-    // Seed defaults if brand new
     if (workouts.length === 0) {
       workouts = [
         {
@@ -498,7 +520,6 @@
       localStorage.setItem(STORAGE_KEY_RUNS, JSON.stringify(runs));
     }
 
-    // Save helper
     const persistData = () => {
       localStorage.setItem(STORAGE_KEY_WORKOUTS, JSON.stringify(workouts));
       localStorage.setItem(STORAGE_KEY_RUNS, JSON.stringify(runs));
@@ -506,43 +527,45 @@
       updateGlobalCounters();
     };
 
-    // Active session variables
     let activeSession = null;
     let sessionTimerInterval = null;
     let sessionSeconds = 0;
     let isSessionPaused = false;
 
-    // Rest timer variables
     let restTimerInterval = null;
     let restTimerSeconds = 0;
 
-    // Run tracker variables
     let runTrackerInterval = null;
     let runSeconds = 0;
     let runDistance = 0;
     let isRunActive = false;
 
-    // Toast helper
     const showToast = (msg) => {
       const toast = document.getElementById('toast');
       document.getElementById('toast-text').innerText = msg;
       toast.classList.remove('hidden');
       setTimeout(() => {
         toast.classList.add('hidden');
-      }, 3500);
+      }, 3000);
     };
 
-    // Tab Switcher
+    // Tab Switcher (Updates both desktop and mobile docks)
     const switchTab = (tabName) => {
       document.querySelectorAll('section[id^="view-"]').forEach((el) => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach((btn) => {
-        btn.className = 'nav-btn flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800';
+        btn.className = 'nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800';
+      });
+      document.querySelectorAll('nav[class*="md:hidden"] button').forEach((btn) => {
+        btn.className = 'flex flex-col items-center gap-0.5 py-1 px-2.5 text-slate-400 transition-all';
       });
 
       const targetView = document.getElementById(`view-${tabName}`);
       const targetBtn = document.getElementById(`tab-btn-${tabName}`);
+      const mobBtn = document.getElementById(`mob-nav-${tabName}`);
+
       if (targetView) targetView.classList.remove('hidden');
-      if (targetBtn) targetBtn.className = 'nav-btn flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20';
+      if (targetBtn) targetBtn.className = 'nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20';
+      if (mobBtn) mobBtn.className = 'flex flex-col items-center gap-0.5 py-1 px-2.5 text-emerald-400 font-bold transition-all';
 
       if (tabName === 'history') renderHistory();
       if (tabName === 'analytics') renderAnalytics();
@@ -552,7 +575,6 @@
       lucide.createIcons();
     };
 
-    // Format time helpers
     const formatTime = (secs) => {
       const m = Math.floor(secs / 60);
       const s = secs % 60;
@@ -565,26 +587,25 @@
       return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     };
 
-    // Render Routine Cards
     const renderRoutineCards = () => {
       const container = document.getElementById('routine-cards-grid');
       container.innerHTML = TAILORED_ROUTINES.map((routine) => `
-        <div class="bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-xl">
-          <div class="space-y-4">
+        <div class="bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-xl">
+          <div class="space-y-3">
             <div class="flex items-center justify-between">
-              <span class="text-3xl p-2 rounded-xl bg-slate-800 border border-slate-700">${routine.icon}</span>
-              <span class="text-xs font-bold uppercase px-2.5 py-1 rounded bg-slate-800 text-slate-300">${routine.category}</span>
+              <span class="text-2xl sm:text-3xl p-1.5 sm:p-2 rounded-xl bg-slate-800 border border-slate-700">${routine.icon}</span>
+              <span class="text-[10px] sm:text-xs font-bold uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300">${routine.category}</span>
             </div>
             <div>
-              <h3 class="font-bold text-lg text-white">${routine.title}</h3>
-              <p class="text-xs text-slate-400 mt-1">${routine.description}</p>
+              <h3 class="font-bold text-base sm:text-lg text-white">${routine.title}</h3>
+              <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">${routine.description}</p>
             </div>
             <div class="space-y-1 pt-2 border-t border-slate-800">
-              <p class="text-[11px] uppercase font-semibold text-slate-500">Exercises (${routine.exercises.length}):</p>
-              ${routine.exercises.map((e) => `<div class="text-xs text-slate-300 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span class="truncate">${e.name}</span></div>`).join('')}
+              <p class="text-[10px] uppercase font-semibold text-slate-500">Includes (${routine.exercises.length} Exercises):</p>
+              ${routine.exercises.map((e) => `<div class="text-[11px] sm:text-xs text-slate-300 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span><span class="truncate">${e.name}</span></div>`).join('')}
             </div>
           </div>
-          <button onclick="startRoutine('${routine.id}')" class="mt-6 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-[0.98]">
+          <button onclick="startRoutine('${routine.id}')" class="mt-4 sm:mt-5 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 active:from-emerald-400 active:to-teal-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-lg active:scale-[0.98] transition-transform">
             <i data-lucide="play" class="w-4 h-4 fill-slate-950"></i>
             <span>Start ${routine.category} Workout</span>
           </button>
@@ -593,7 +614,6 @@
       lucide.createIcons();
     };
 
-    // Start a Routine
     window.startRoutine = (routineId) => {
       const template = TAILORED_ROUTINES.find((r) => r.id === routineId);
       if (!template) return;
@@ -626,60 +646,87 @@
       showToast(`🚀 Started ${activeSession.title}!`);
     };
 
-    // Render Active Workout Exercises
+    // Mobile-optimized Exercise Card Rendering
     const renderActiveExercises = () => {
       if (!activeSession) return;
       const container = document.getElementById('active-exercises-container');
       container.innerHTML = activeSession.exercises.map((ex, exIdx) => `
         <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
-          <div class="p-4 bg-slate-850 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <div class="p-3 sm:p-4 bg-slate-850 border-b border-slate-800 flex flex-wrap items-center justify-between gap-1.5">
             <div>
-              <div class="flex items-center gap-2">
-                <span class="w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">${exIdx + 1}</span>
-                <h3 class="font-bold text-base text-white">${ex.name}</h3>
+              <div class="flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">${exIdx + 1}</span>
+                <h3 class="font-bold text-sm sm:text-base text-white">${ex.name}</h3>
               </div>
-              ${ex.formCue ? `<p class="text-xs text-slate-400 mt-1 pl-8">${ex.formCue}</p>` : ''}
+              ${ex.formCue ? `<p class="text-[11px] text-slate-400 mt-1 pl-6 leading-relaxed">${ex.formCue}</p>` : ''}
             </div>
-            <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-medium">Target: ${ex.targetReps}</span>
+            <span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-medium">Target: ${ex.targetReps}</span>
           </div>
 
-          <div class="p-4 overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead>
-                <tr class="text-slate-400 border-b border-slate-800 pb-2">
-                  <th class="py-2 px-2">SET</th>
-                  <th class="py-2 px-2">WEIGHT</th>
-                  <th class="py-2 px-2">REPS</th>
-                  <th class="py-2 px-2">NOTE</th>
-                  <th class="py-2 px-2 text-center">CHECK</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-800/60">
-                ${ex.sets.map((s, sIdx) => `
-                  <tr class="${s.completed ? 'bg-emerald-500/5' : ''}">
-                    <td class="py-2.5 px-2 font-bold text-slate-300">#${s.setNum}</td>
-                    <td class="py-2 px-2">
-                      <div class="flex items-center gap-1">
-                        <input type="number" value="${s.weight}" onchange="updateSetValue(${exIdx}, ${sIdx}, 'weight', this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-white font-mono font-bold focus:outline-none focus:border-emerald-500" />
-                        <span class="text-slate-400 text-xs">${s.unit}</span>
-                      </div>
-                    </td>
-                    <td class="py-2 px-2">
-                      <input type="number" value="${s.reps}" onchange="updateSetValue(${exIdx}, ${sIdx}, 'reps', this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-white font-mono font-bold focus:outline-none focus:border-emerald-500" />
-                    </td>
-                    <td class="py-2 px-2">
-                      <input type="text" placeholder="Cue note" value="${s.note || ''}" onchange="updateSetValue(${exIdx}, ${sIdx}, 'note', this.value)" class="w-full max-w-[140px] bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-slate-200 text-xs focus:outline-none" />
-                    </td>
-                    <td class="py-2 px-2 text-center">
-                      <button onclick="toggleSet(${exIdx}, ${sIdx})" class="px-3 py-1.5 rounded-lg font-bold text-xs flex items-center justify-center gap-1 mx-auto transition-all ${s.completed ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300 border border-slate-700'}">
-                        <i data-lucide="check" class="w-3.5 h-3.5"></i>
-                        <span>${s.completed ? 'Done' : 'Check'}</span>
-                      </button>
-                    </td>
+          <div class="p-2 sm:p-4">
+            <div class="space-y-2 sm:hidden">
+              ${ex.sets.map((s, sIdx) => `
+                <div class="p-2.5 rounded-xl border ${s.completed ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-slate-850 border-slate-800'} flex items-center justify-between gap-2">
+                  <span class="font-bold text-xs text-slate-300 shrink-0">#${s.setNum}</span>
+                  
+                  <div class="flex items-center gap-1.5">
+                    <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-1.5 py-1">
+                      <input type="number" value="${s.weight}" onchange="updateSetValue(${exIdx}, ${sIdx}, 'weight', this.value)" class="w-12 bg-transparent text-white font-mono font-bold text-xs focus:outline-none" />
+                      <span class="text-slate-400 text-[10px] ml-0.5">${s.unit}</span>
+                    </div>
+                    
+                    <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-1.5 py-1">
+                      <input type="number" value="${s.reps}" onchange="updateSetValue(${exIdx}, ${sIdx}, 'reps', this.value)" class="w-10 bg-transparent text-white font-mono font-bold text-xs focus:outline-none" />
+                      <span class="text-slate-400 text-[10px] ml-0.5">reps</span>
+                    </div>
+                  </div>
+
+                  <button onclick="toggleSet(${exIdx}, ${sIdx})" class="px-3 py-1.5 rounded-lg font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all ${s.completed ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20' : 'bg-slate-800 text-slate-300 border border-slate-700'}">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                    <span>${s.completed ? 'Done' : 'Log'}</span>
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="hidden sm:block overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="text-slate-400 border-b border-slate-800 pb-2">
+                    <th class="py-2 px-2">SET</th>
+                    <th class="py-2 px-2">WEIGHT</th>
+                    <th class="py-2 px-2">REPS</th>
+                    <th class="py-2 px-2">CUE NOTE</th>
+                    <th class="py-2 px-2 text-center">STATUS</th>
                   </tr>
-                `).join('')}
-              </tbody>
-            </table>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60">
+                  ${ex.sets.map((s, sIdx) => `
+                    <tr class="${s.completed ? 'bg-emerald-500/5' : ''}">
+                      <td class="py-2 px-2 font-bold text-slate-300">#${s.setNum}</td>
+                      <td class="py-2 px-2">
+                        <div class="flex items-center gap-1">
+                          <input type="number" value="${s.weight}" onchange="updateSetValue(${exIdx}, ${sIdx}, 'weight', this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-white font-mono font-bold focus:outline-none focus:border-emerald-500" />
+                          <span class="text-slate-400 text-xs">${s.unit}</span>
+                        </div>
+                      </td>
+                      <td class="py-2 px-2">
+                        <input type="number" value="${s.reps}" onchange="updateSetValue(${exIdx}, ${sIdx}, 'reps', this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-white font-mono font-bold focus:outline-none focus:border-emerald-500" />
+                      </td>
+                      <td class="py-2 px-2">
+                        <input type="text" placeholder="Note" value="${s.note || ''}" onchange="updateSetValue(${exIdx}, ${sIdx}, 'note', this.value)" class="w-full max-w-[140px] bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-slate-200 text-xs focus:outline-none" />
+                      </td>
+                      <td class="py-2 px-2 text-center">
+                        <button onclick="toggleSet(${exIdx}, ${sIdx})" class="px-3 py-1.5 rounded-lg font-bold text-xs flex items-center justify-center gap-1 mx-auto transition-all ${s.completed ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300 border border-slate-700'}">
+                          <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                          <span>${s.completed ? 'Done' : 'Check'}</span>
+                        </button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       `).join('');
@@ -714,7 +761,7 @@
       if (restTimerInterval) clearInterval(restTimerInterval);
       restTimerSeconds = seconds;
       document.getElementById('rest-timer-bar').classList.remove('hidden');
-      document.getElementById('rest-timer-count').innerText = `${restTimerSeconds}s remaining`;
+      document.getElementById('rest-timer-count').innerText = `${restTimerSeconds}s`;
 
       restTimerInterval = setInterval(() => {
         restTimerSeconds--;
@@ -725,7 +772,7 @@
           document.getElementById('rest-timer-bar').classList.add('hidden');
           showToast('⏱️ Rest finished! Time for your next set.');
         } else {
-          document.getElementById('rest-timer-count').innerText = `${restTimerSeconds}s remaining`;
+          document.getElementById('rest-timer-count').innerText = `${restTimerSeconds}s`;
           if (restTimerSeconds <= 3) playBeep(440, 0.1);
         }
       }, 1000);
@@ -734,7 +781,7 @@
 
     window.adjustRestTimer = (amt) => {
       restTimerSeconds += amt;
-      document.getElementById('rest-timer-count').innerText = `${restTimerSeconds}s remaining`;
+      document.getElementById('rest-timer-count').innerText = `${restTimerSeconds}s`;
     };
 
     window.stopRestTimer = () => {
@@ -742,7 +789,6 @@
       document.getElementById('rest-timer-bar').classList.add('hidden');
     };
 
-    // Finish Workout & Persist
     window.finishActiveWorkout = () => {
       if (!activeSession) return;
 
@@ -781,38 +827,37 @@
       stopRestTimer();
 
       switchTab('history');
-      showToast('🎉 Workout saved permanently to local storage!');
+      showToast('🎉 Workout saved to your logs!');
     };
 
-    // Render History
     const renderHistory = () => {
       const container = document.getElementById('history-logs-list');
       if (workouts.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-slate-500 bg-slate-900 rounded-2xl border border-slate-800">No workout logs found yet. Complete a workout to see it here!</div>`;
+        container.innerHTML = `<div class="p-6 text-center text-slate-500 bg-slate-900 rounded-2xl border border-slate-800 text-xs">No workout logs found. Complete a workout to start!</div>`;
         return;
       }
 
       container.innerHTML = workouts.map((w) => `
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-md space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-            <div class="flex items-center gap-3">
-              <span class="text-2xl p-2 rounded-xl bg-slate-800 border border-slate-700">${w.category === 'Push' ? '💥' : w.category === 'Pull' ? '🎣' : '🦵'}</span>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-md space-y-3">
+          <div class="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
+            <div class="flex items-center gap-2.5">
+              <span class="text-xl sm:text-2xl p-1.5 rounded-xl bg-slate-800 border border-slate-700">${w.category === 'Push' ? '💥' : w.category === 'Pull' ? '🎣' : '🦵'}</span>
               <div>
-                <h3 class="font-bold text-lg text-white">${w.title}</h3>
-                <p class="text-xs text-slate-400">${formatDate(w.completedAt)} · ${w.durationMinutes} mins</p>
+                <h3 class="font-bold text-sm sm:text-base text-white">${w.title}</h3>
+                <p class="text-[10px] sm:text-xs text-slate-400">${formatDate(w.completedAt)} · ${w.durationMinutes} mins</p>
               </div>
             </div>
-            <div class="flex items-center gap-3">
-              <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-lg">${w.totalVolumeKg?.toLocaleString()} kg vol</span>
-              <button onclick="deleteWorkout('${w.id}')" class="p-1.5 text-slate-500 hover:text-rose-400 rounded-lg hover:bg-slate-800 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] sm:text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-lg">${w.totalVolumeKg?.toLocaleString()} kg vol</span>
+              <button onclick="deleteWorkout('${w.id}')" class="p-1 text-slate-500 hover:text-rose-400 rounded-lg hover:bg-slate-800"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
             ${w.exercises.map((ex) => `
-              <div class="bg-slate-850 p-3 rounded-xl border border-slate-800 text-xs">
-                <span class="font-semibold text-slate-200 block mb-1.5">${ex.name}</span>
-                <div class="flex flex-wrap gap-1.5">
-                  ${ex.sets.map((s) => `<span class="px-2 py-0.5 bg-slate-800 rounded text-slate-300 font-mono text-[11px]">Set ${s.setNum}: <strong class="text-emerald-400">${s.weight}${s.unit}</strong> x ${s.reps}</span>`).join('')}
+              <div class="bg-slate-850 p-2.5 rounded-xl border border-slate-800 text-xs">
+                <span class="font-semibold text-slate-200 block mb-1 text-[11px]">${ex.name}</span>
+                <div class="flex flex-wrap gap-1">
+                  ${ex.sets.map((s) => `<span class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300 font-mono text-[10px]">#${s.setNum}: <strong class="text-emerald-400">${s.weight}${s.unit}</strong> x ${s.reps}</span>`).join('')}
                 </div>
               </div>
             `).join('')}
@@ -830,7 +875,7 @@
     };
 
     window.clearAllHistory = () => {
-      if (confirm('Are you sure you want to clear all history logs?')) {
+      if (confirm('Clear all recorded workout history?')) {
         workouts = [];
         persistData();
         renderHistory();
@@ -838,7 +883,6 @@
       }
     };
 
-    // Render Analytics & PRs
     const renderAnalytics = () => {
       let totalVol = 0;
       let pushC = 0, pullC = 0, legsC = 0;
@@ -872,51 +916,50 @@
       document.getElementById('stat-pr-bench').innerText = `${Math.round(maxBench)} kg`;
 
       document.getElementById('pr-cards-grid').innerHTML = `
-        <div class="bg-slate-850 p-4 rounded-xl border border-slate-800"><span class="text-xs text-slate-400">Flat Barbell Bench</span><div class="text-2xl font-black text-white mt-1">${Math.round(maxBench)} kg</div><p class="text-[11px] text-emerald-400">12-15 reps continuous</p></div>
-        <div class="bg-slate-850 p-4 rounded-xl border border-slate-800"><span class="text-xs text-slate-400">Incline Barbell Press</span><div class="text-2xl font-black text-white mt-1">${Math.round(maxIncline)} kg</div><p class="text-[11px] text-emerald-400">10-12 reps continuous</p></div>
-        <div class="bg-slate-850 p-4 rounded-xl border border-slate-800"><span class="text-xs text-slate-400">Barbell Back Squats</span><div class="text-2xl font-black text-white mt-1">${Math.round(maxSquat)} kg</div><p class="text-[11px] text-emerald-400">10 reps parallel depth</p></div>
-        <div class="bg-slate-850 p-4 rounded-xl border border-slate-800"><span class="text-xs text-slate-400">Romanian Deadlifts (RDLs)</span><div class="text-2xl font-black text-white mt-1">${Math.round(maxRDL)} kg</div><p class="text-[11px] text-emerald-400">10 reps strict hinge</p></div>
-        <div class="bg-slate-850 p-4 rounded-xl border border-slate-800"><span class="text-xs text-slate-400">Single-Arm DB Row</span><div class="text-2xl font-black text-white mt-1">50 lbs</div><p class="text-[11px] text-emerald-400">15 reps per arm</p></div>
-        <div class="bg-slate-850 p-4 rounded-xl border border-slate-800"><span class="text-xs text-slate-400">Plank Core Hold</span><div class="text-2xl font-black text-white mt-1">60 sec</div><p class="text-[11px] text-emerald-400">3 continuous rounds</p></div>
+        <div class="bg-slate-850 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400">Flat Bench</span><div class="text-lg sm:text-2xl font-black text-white mt-0.5">${Math.round(maxBench)} kg</div><p class="text-[9px] text-emerald-400">12-15 reps</p></div>
+        <div class="bg-slate-850 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400">Incline Press</span><div class="text-lg sm:text-2xl font-black text-white mt-0.5">${Math.round(maxIncline)} kg</div><p class="text-[9px] text-emerald-400">10-12 reps</p></div>
+        <div class="bg-slate-850 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400">Back Squat</span><div class="text-lg sm:text-2xl font-black text-white mt-0.5">${Math.round(maxSquat)} kg</div><p class="text-[9px] text-emerald-400">10 reps</p></div>
+        <div class="bg-slate-850 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400">RDLs</span><div class="text-lg sm:text-2xl font-black text-white mt-0.5">${Math.round(maxRDL)} kg</div><p class="text-[9px] text-emerald-400">10 reps</p></div>
+        <div class="bg-slate-850 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400">DB Row</span><div class="text-lg sm:text-2xl font-black text-white mt-0.5">50 lbs</div><p class="text-[9px] text-emerald-400">15 reps</p></div>
+        <div class="bg-slate-850 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400">Plank Core</span><div class="text-lg sm:text-2xl font-black text-white mt-0.5">60 sec</div><p class="text-[9px] text-emerald-400">3 rounds</p></div>
       `;
 
       const tot = workouts.length || 1;
       document.getElementById('split-distribution-bars').innerHTML = `
         <div>
-          <div class="flex justify-between text-xs font-semibold mb-1"><span class="text-amber-400">Push (Chest / Shoulders / Triceps)</span><span>${pushC} sessions</span></div>
-          <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-amber-500 rounded-full" style="width: ${(pushC / tot) * 100}%"></div></div>
+          <div class="flex justify-between text-[11px] font-semibold mb-1"><span class="text-amber-400">Push</span><span>${pushC} sessions</span></div>
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-amber-500 rounded-full" style="width: ${(pushC / tot) * 100}%"></div></div>
         </div>
         <div>
-          <div class="flex justify-between text-xs font-semibold mb-1"><span class="text-blue-400">Pull (Back / Lats / Biceps)</span><span>${pullC} sessions</span></div>
-          <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-blue-500 rounded-full" style="width: ${(pullC / tot) * 100}%"></div></div>
+          <div class="flex justify-between text-[11px] font-semibold mb-1"><span class="text-blue-400">Pull</span><span>${pullC} sessions</span></div>
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-blue-500 rounded-full" style="width: ${(pullC / tot) * 100}%"></div></div>
         </div>
         <div>
-          <div class="flex justify-between text-xs font-semibold mb-1"><span class="text-emerald-400">Legs (Quads / Glutes / Calves / Core)</span><span>${legsC} sessions</span></div>
-          <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: ${(legsC / tot) * 100}%"></div></div>
+          <div class="flex justify-between text-[11px] font-semibold mb-1"><span class="text-emerald-400">Legs</span><span>${legsC} sessions</span></div>
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: ${(legsC / tot) * 100}%"></div></div>
         </div>
       `;
       lucide.createIcons();
     };
 
-    // Render Weekly Planner
     const renderPlanner = () => {
       const todayIdx = new Date().getDay();
       document.getElementById('weekly-plan-grid').innerHTML = weeklyPlan.map((p, idx) => {
         const isToday = todayIdx === (idx === 6 ? 0 : idx + 1);
         return `
-          <div class="rounded-2xl p-4 border flex flex-col justify-between ${isToday ? 'bg-slate-850 border-emerald-500 ring-2 ring-emerald-500/20' : 'bg-slate-900 border-slate-800'}">
-            <div class="space-y-2">
+          <div class="rounded-2xl p-3 sm:p-4 border flex flex-col justify-between ${isToday ? 'bg-slate-850 border-emerald-500 ring-2 ring-emerald-500/20' : 'bg-slate-900 border-slate-800'}">
+            <div class="space-y-1.5">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-white uppercase">${p.day}</span>
-                ${isToday ? '<span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 uppercase">Today</span>' : ''}
+                ${isToday ? '<span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 uppercase">Today</span>' : ''}
               </div>
               <div>
-                <h4 class="font-bold text-sm text-slate-100">${p.routineTitle}</h4>
-                <p class="text-[11px] text-slate-400 mt-0.5">${p.focus}</p>
+                <h4 class="font-bold text-xs sm:text-sm text-slate-100">${p.routineTitle}</h4>
+                <p class="text-[10px] sm:text-[11px] text-slate-400">${p.focus}</p>
               </div>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-800">
-              ${!p.rest ? `<button onclick="startRoutine('${p.routineId}')" class="w-full py-1.5 px-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1"><i data-lucide="play" class="w-3 h-3 fill-current"></i><span>Launch</span></button>` : '<div class="text-center py-1 text-slate-500 text-[11px]">Recovery</div>'}
+            <div class="mt-3 pt-2 border-t border-slate-800">
+              ${!p.rest ? `<button onclick="startRoutine('${p.routineId}')" class="w-full py-1 px-2 bg-emerald-500/10 active:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg text-[11px] font-bold transition-colors flex items-center justify-center gap-1"><i data-lucide="play" class="w-3 h-3 fill-current"></i><span>Launch</span></button>` : '<div class="text-center py-0.5 text-slate-500 text-[10px]">Rest Day</div>'}
             </div>
           </div>
         `;
@@ -928,10 +971,10 @@
       weeklyPlan = DEFAULT_WEEKLY_PLAN;
       persistData();
       renderPlanner();
-      showToast('Weekly split reset to standard PPL!');
+      showToast('Weekly split reset to default!');
     };
 
-    // Run & Cardio Tracker
+    // Run Tracker
     window.startRunTracker = () => {
       isRunActive = true;
       runSeconds = 0;
@@ -942,7 +985,7 @@
       if (runTrackerInterval) clearInterval(runTrackerInterval);
       runTrackerInterval = setInterval(() => {
         runSeconds++;
-        runDistance += 0.0028; // ~10 km/h simulation
+        runDistance += 0.0028;
         const paceMin = (runSeconds / 60) / runDistance;
         const pM = Math.floor(paceMin);
         const pS = Math.round((paceMin - pM) * 60);
@@ -965,13 +1008,13 @@
 
       const r = {
         id: `r-${Date.now()}`,
-        title: runDistance > 4 ? 'Endurance Run' : 'Cardio Run / Jog',
+        title: runDistance > 4 ? 'Endurance Run' : 'Cardio Run',
         completedAt: new Date().toISOString(),
         distanceKm: +runDistance.toFixed(2),
         durationSeconds: runSeconds,
         paceMinPerKm: `${pM}:${String(pS).padStart(2, '0')}`,
         calories: Math.floor(runDistance * 65),
-        notes: 'Tracked via live cardio module'
+        notes: 'Tracked via live cardio'
       };
 
       runs.unshift(r);
@@ -981,7 +1024,7 @@
       document.getElementById('btn-start-run').classList.remove('hidden');
       document.getElementById('run-active-actions').classList.add('hidden');
       renderCardio();
-      showToast('🏃 Cardio session saved to history!');
+      showToast('🏃 Cardio session saved to logs!');
     };
 
     window.cancelRunSession = () => {
@@ -997,21 +1040,21 @@
     const renderCardio = () => {
       document.getElementById('run-logs-count').innerText = runs.length;
       document.getElementById('cardio-logs-grid').innerHTML = runs.map((r) => `
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-md">
-          <div class="space-y-3">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-md">
+          <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="font-bold text-white text-base">${r.title}</span>
-              <span class="text-xs text-slate-400">${formatDate(r.completedAt)}</span>
+              <span class="font-bold text-white text-sm sm:text-base">${r.title}</span>
+              <span class="text-[10px] text-slate-400">${formatDate(r.completedAt)}</span>
             </div>
-            <div class="grid grid-cols-3 gap-2 bg-slate-850 p-3 rounded-xl border border-slate-800 text-center">
-              <div><span class="text-[10px] text-slate-400 uppercase block">Distance</span><span class="text-sm font-bold text-indigo-400">${r.distanceKm} km</span></div>
-              <div><span class="text-[10px] text-slate-400 uppercase block">Pace</span><span class="text-sm font-bold text-amber-400">${r.paceMinPerKm}/km</span></div>
-              <div><span class="text-[10px] text-slate-400 uppercase block">Energy</span><span class="text-sm font-bold text-rose-400">${r.calories} kcal</span></div>
+            <div class="grid grid-cols-3 gap-1.5 bg-slate-850 p-2 rounded-xl border border-slate-800 text-center">
+              <div><span class="text-[9px] text-slate-400 uppercase block">Distance</span><span class="text-xs sm:text-sm font-bold text-indigo-400">${r.distanceKm} km</span></div>
+              <div><span class="text-[9px] text-slate-400 uppercase block">Pace</span><span class="text-xs sm:text-sm font-bold text-amber-400">${r.paceMinPerKm}/km</span></div>
+              <div><span class="text-[9px] text-slate-400 uppercase block">Energy</span><span class="text-xs sm:text-sm font-bold text-rose-400">${r.calories} kcal</span></div>
             </div>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-            <span class="text-slate-400">Duration: ${Math.round(r.durationSeconds / 60)} mins</span>
-            <button onclick="deleteRun('${r.id}')" class="text-slate-500 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          <div class="mt-3 pt-2 border-t border-slate-800 flex items-center justify-between text-[11px]">
+            <span class="text-slate-400">${Math.round(r.durationSeconds / 60)} mins</span>
+            <button onclick="deleteRun('${r.id}')" class="text-slate-500 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
           </div>
         </div>
       `).join('');
@@ -1025,16 +1068,15 @@
       showToast('Run removed from logs.');
     };
 
-    // Render Exercise Library
     const renderExerciseLibrary = () => {
       document.getElementById('exercise-library-grid').innerHTML = TAILORED_ROUTINES.flatMap((r) =>
         r.exercises.map((e) => `
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 shadow-md">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2 shadow-md">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase px-2.5 py-1 rounded bg-slate-800 text-emerald-400">${r.category}</span>
-              <span class="text-xs text-slate-400">${e.targetReps}</span>
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-800 text-emerald-400">${r.category}</span>
+              <span class="text-[11px] text-slate-400">${e.targetReps}</span>
             </div>
-            <h3 class="font-bold text-base text-white">${e.name}</h3>
+            <h3 class="font-bold text-sm sm:text-base text-white">${e.name}</h3>
             <p class="text-xs text-slate-300 leading-relaxed">${e.formCue}</p>
           </div>
         `)
@@ -1046,7 +1088,6 @@
       document.getElementById('history-count').innerText = workouts.length;
     };
 
-    // Init
     window.addEventListener('DOMContentLoaded', () => {
       renderRoutineCards();
       updateGlobalCounters();
