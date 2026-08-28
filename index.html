@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>ProjectJEHV Tracker | Push Pull Legs & Cardio</title>
   
+  <!-- Custom Favicon with Glowing Green JEHV Emblem -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23020617' rx='20'/%3E%3Cpath d='M30 25 L45 25 L45 55 L30 55 Z M55 25 L75 25 L75 37 L65 37 L65 43 L75 43 L75 55 L55 55 Z M40 60 L60 60 L50 78 Z' fill='%2322c55e' filter='drop-shadow(0 0 6px %234ade80)'/%3E%3C/svg%3E" />
 
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <script>
@@ -52,7 +55,6 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-    /* Smooth touch tap highlights */
     * {
       -webkit-tap-highlight-color: transparent;
     }
@@ -61,9 +63,13 @@
 
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-white pb-20 md:pb-6">
 
+  <!-- ========================================== -->
+  <!-- HEADER & NAVIGATION                        -->
+  <!-- ========================================== -->
   <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/90 px-3 py-2.5 sm:px-4 sm:py-3">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
       
+      <!-- Brand Logo & Title -->
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-950 border border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
           <svg viewBox="0 0 100 100" class="w-6 h-6 sm:w-7 sm:h-7 fill-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]">
@@ -83,6 +89,7 @@
         </div>
       </div>
 
+      <!-- Header Quick Indicators -->
       <div class="flex items-center gap-2">
         <div id="header-active-indicator" class="hidden cursor-pointer flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium animate-pulse" onclick="switchTab('active')">
           <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i>
@@ -97,6 +104,7 @@
       </div>
     </div>
 
+    <!-- Navigation Scrollable Tabs (Desktop & Tablet) -->
     <div class="max-w-6xl mx-auto mt-2.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 border-t border-slate-800/80 pt-2 text-xs">
       <button onclick="switchTab('active')" id="tab-btn-active" class="nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20">
         <i data-lucide="activity" class="w-4 h-4"></i>
@@ -130,6 +138,9 @@
     </div>
   </header>
 
+  <!-- ========================================== -->
+  <!-- FLOATING REST TIMER BANNER                 -->
+  <!-- ========================================== -->
   <div id="rest-timer-bar" class="hidden sticky top-[92px] sm:top-[104px] z-30 bg-gradient-to-r from-cyan-950 via-slate-900 to-blue-950 border-y border-cyan-500/40 px-3 py-2 shadow-xl flex items-center justify-between text-white text-xs">
     <div class="flex items-center gap-2">
       <div class="w-6 h-6 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center font-bold shrink-0">
@@ -146,8 +157,12 @@
     </div>
   </div>
 
+  <!-- ========================================== -->
+  <!-- MAIN APP CONTAINER                         -->
+  <!-- ========================================== -->
   <main class="flex-1 max-w-6xl w-full mx-auto p-3.5 sm:p-5 md:p-6 space-y-5">
 
+    <!-- TAB 1: TODAY'S WORKOUT / LOGGER -->
     <section id="view-active" class="space-y-4 sm:space-y-6">
       <div id="workout-launcher" class="space-y-4 sm:space-y-6">
         <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-800 rounded-2xl p-4 sm:p-6 relative overflow-hidden shadow-xl">
@@ -166,6 +181,7 @@
         <div id="routine-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-5"></div>
       </div>
 
+      <!-- Active Session Runner Mode -->
       <div id="workout-runner" class="hidden space-y-4 sm:space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
           <div class="flex items-center gap-3">
@@ -217,6 +233,7 @@
       </div>
     </section>
 
+    <!-- TAB 2: WEEKLY PLANNER -->
     <section id="view-planner" class="hidden space-y-4 sm:space-y-6">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-3">
@@ -233,6 +250,7 @@
       <div id="weekly-plan-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-2.5 sm:gap-3"></div>
     </section>
 
+    <!-- TAB 3: RUN & CARDIO TRACKER -->
     <section id="view-cardio" class="hidden space-y-4 sm:space-y-6">
       <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-3">
@@ -294,6 +312,7 @@
       </div>
     </section>
 
+    <!-- TAB 4: HISTORY & LOGS -->
     <section id="view-history" class="hidden space-y-4 sm:space-y-6">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl flex flex-wrap items-center justify-between gap-3">
         <div>
@@ -308,6 +327,7 @@
       <div id="history-logs-list" class="space-y-3 sm:space-y-4"></div>
     </section>
 
+    <!-- TAB 5: ANALYTICS & PRS -->
     <section id="view-analytics" class="hidden space-y-4 sm:space-y-6">
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4">
@@ -357,6 +377,7 @@
       </div>
     </section>
 
+    <!-- TAB 6: EXERCISE LIBRARY -->
     <section id="view-exercises" class="hidden space-y-4 sm:space-y-6">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl">
         <h2 class="text-lg sm:text-xl font-extrabold text-white">Exercise Library & Technique Cues</h2>
@@ -367,11 +388,17 @@
 
   </main>
 
+  <!-- ========================================== -->
+  <!-- TOAST NOTIFICATION CONTAINER               -->
+  <!-- ========================================== -->
   <div id="toast" class="hidden fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 bg-slate-900 border border-emerald-500/50 text-emerald-300 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl shadow-2xl flex items-center gap-2.5 text-xs font-semibold transition-all">
     <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
     <span id="toast-text">Message</span>
   </div>
 
+  <!-- ========================================== -->
+  <!-- MOBILE BOTTOM NAVIGATION DOCK (Phones)     -->
+  <!-- ========================================== -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800/90 px-2 py-1.5 flex items-center justify-around">
     <button onclick="switchTab('active')" id="mob-nav-active" class="flex flex-col items-center gap-0.5 py-1 px-2.5 text-emerald-400 font-bold transition-all">
       <i data-lucide="activity" class="w-4 h-4"></i>
@@ -395,12 +422,17 @@
     </button>
   </nav>
 
+  <!-- ========================================== -->
+  <!-- FOOTER (Desktop only)                      -->
+  <!-- ========================================== -->
   <footer class="hidden md:block border-t border-slate-900 bg-slate-950 px-4 py-4 text-center text-xs text-slate-500">
     <p>ProjectJEHV Tracker · Push Pull Legs & Mobile Responsive</p>
   </footer>
 
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT LOGIC & LOCALSTORAGE PERSIST    -->
+  <!-- ========================================== -->
   <script>
-    // Audio Beeper Function
     const playBeep = (freq = 600, duration = 0.15) => {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -417,7 +449,6 @@
       } catch (e) {}
     };
 
-    // Tailored Preset Templates
     const TAILORED_ROUTINES = [
       {
         id: 'push-day',
@@ -549,7 +580,6 @@
       }, 3000);
     };
 
-    // Tab Switcher (Updates both desktop and mobile docks)
     const switchTab = (tabName) => {
       document.querySelectorAll('section[id^="view-"]').forEach((el) => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach((btn) => {
@@ -646,7 +676,6 @@
       showToast(`🚀 Started ${activeSession.title}!`);
     };
 
-    // Mobile-optimized Exercise Card Rendering
     const renderActiveExercises = () => {
       if (!activeSession) return;
       const container = document.getElementById('active-exercises-container');
@@ -756,7 +785,6 @@
       document.getElementById('btn-pause-label').innerText = isSessionPaused ? 'Resume' : 'Pause';
     };
 
-    // Rest Timers
     window.startRestTimer = (seconds) => {
       if (restTimerInterval) clearInterval(restTimerInterval);
       restTimerSeconds = seconds;
@@ -974,7 +1002,6 @@
       showToast('Weekly split reset to default!');
     };
 
-    // Run Tracker
     window.startRunTracker = () => {
       isRunActive = true;
       runSeconds = 0;
