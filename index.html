@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexTracker - Workout & Cardio Tracker</title>
+  <title>ProjectJEHV Tracker - Workout & Cardio Tracker</title>
+  <!-- JEHV Glowing Green Vector Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23020617'/%3E%3Cdefs%3E%3Cfilter id='g' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='4' flood-color='%2310b981' flood-opacity='0.9'/%3E%3C/filter%3E%3ClinearGradient id='lg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2334d399'/%3E%3Cstop offset='50%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23059669'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg filter='url(%23g)' stroke='%2334d399' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M47 16 L47 28 L23 28 L23 34 L40 34 L40 54 L34 54 L34 46 L20 54 L27 61 L40 61 L47 61 L47 16 Z' fill='url(%23lg)'/%3E%3Cpath d='M53 16 L53 30 L63 30 L63 38 L53 38 L53 54 L60 54 L60 44 L77 44 L77 70 L70 70 L70 50 L63 50 L63 68 L53 68 L53 16 Z' fill='url(%23lg)'/%3E%3Cpath d='M30 63 L50 84 L70 63 L61 63 L50 74 L39 63 Z' fill='%23020617' stroke='%2334d399' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
@@ -56,17 +58,49 @@
   <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3">
     <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-slate-950 font-black">
-          <i data-lucide="dumbbell" class="w-6 h-6 stroke-[2.5]"></i>
+        <!-- JEHV Glowing Emblem Logo -->
+        <div class="relative group">
+          <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl blur-md opacity-40 group-hover:opacity-75 transition duration-300"></div>
+          <div class="relative w-11 h-11 rounded-2xl bg-slate-950 border border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/20 overflow-hidden">
+            <svg class="w-8 h-8 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#6ee7b7" />
+                  <stop offset="40%" stop-color="#10b981" />
+                  <stop offset="100%" stop-color="#047857" />
+                </linearGradient>
+                <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- JEHV Stylized Monogram Vector -->
+              <g filter="url(#neon-glow)" stroke="#6ee7b7" stroke-width="1.5" stroke-linejoin="round">
+                <!-- Left Wing: J/E Segment -->
+                <path d="M47 15 L47 28 L23 28 L23 34 L40 34 L40 54 L34 54 L34 46 L20 54 L27 61 L40 61 L47 61 L47 15 Z" fill="url(#logo-grad)" />
+                <!-- Right Wing: H Segment -->
+                <path d="M53 15 L53 30 L63 30 L63 38 L53 38 L53 54 L60 54 L60 44 L77 44 L77 70 L70 70 L70 50 L63 50 L63 68 L53 68 L53 15 Z" fill="url(#logo-grad)" />
+                <!-- Bottom Crest: V Segment -->
+                <path d="M30 63 L50 84 L70 63 L61 63 L50 74 L39 63 Z" fill="#090d16" stroke="#34d399" stroke-width="2.5" />
+                <path d="M36 67 L50 81 L64 67" stroke="#10b981" stroke-width="2" fill="none" />
+              </g>
+            </svg>
+          </div>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="font-extrabold text-lg tracking-tight text-white">ApexTracker</h1>
+            <h1 class="font-extrabold text-lg tracking-tight text-white flex items-center gap-1.5">
+              <span>ProjectJEHV</span>
+              <span class="text-emerald-400 font-black">Tracker</span>
+            </h1>
             <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
               PPL Live
             </span>
           </div>
-          <p class="text-xs text-slate-400 hidden sm:block">Push · Pull · Legs · Cardio · Auto Save</p>
+          <p class="text-xs text-slate-400 hidden sm:block">Push · Pull · Legs · Cardio · Auto Cloud Sync</p>
         </div>
       </div>
 
