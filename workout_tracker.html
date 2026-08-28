@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApexTracker - Workout & Cardio Tracker</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              900: '#064e3b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom sleek scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-white pb-12">
+
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3">
+    <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-slate-950 font-black">
+          <i data-lucide="dumbbell" class="w-6 h-6 stroke-[2.5]"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold text-lg tracking-tight text-white">ApexTracker</h1>
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              PPL Live
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Push · Pull · Legs · Cardio · Auto Save</p>
+        </div>
+      </div>
+
+      <!-- Quick Session Indicator & Cloud Badge -->
+      <div class="flex items-center gap-3">
+        <div id="header-active-badge" class="hidden cursor-pointer items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium animate-pulse">
+          <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
+          <span id="header-session-time">Active: 00:00</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-850 border border-slate-700/80 text-slate-300 text-xs shadow-inner">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="text-[11px] font-mono text-slate-300 font-semibold">Active Session</span>
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 ml-1"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto mt-3 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 border-t border-slate-800/80 pt-2 text-xs font-semibold">
+      <button onclick="switchTab('active')" id="tab-btn-active" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 whitespace-nowrap transition-all">
+        <i data-lucide="activity" class="w-4 h-4"></i>
+        <span>Today's Workout</span>
+      </button>
+
+      <button onclick="switchTab('planner')" id="tab-btn-planner" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-850 whitespace-nowrap transition-all">
+        <i data-lucide="calendar" class="w-4 h-4"></i>
+        <span>Weekly Split</span>
+      </button>
+
+      <button onclick="switchTab('cardio')" id="tab-btn-cardio" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-850 whitespace-nowrap transition-all">
+        <i data-lucide="footprints" class="w-4 h-4"></i>
+        <span>Run & Cardio</span>
+      </button>
+
+      <button onclick="switchTab('history')" id="tab-btn-history" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-850 whitespace-nowrap transition-all">
+        <i data-lucide="clock" class="w-4 h-4"></i>
+        <span id="history-tab-label">History Logs</span>
+      </button>
+
+      <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-850 whitespace-nowrap transition-all">
+        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+        <span>Analytics & PRs</span>
+      </button>
+    </div>
+  </header>
+
+  <div id="rest-timer-bar" class="hidden sticky top-[108px] z-30 bg-gradient-to-r from-cyan-950 via-slate-900 to-blue-950 border-y border-cyan-500/40 px-4 py-2.5 shadow-xl items-center justify-between text-white text-xs">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center font-bold">
+        <i data-lucide="timer" class="w-4 h-4 animate-spin"></i>
+      </div>
+      <div>
+        <span class="font-semibold text-cyan-200">Rest Timer: </span>
+        <span id="rest-countdown-text" class="font-mono text-base font-bold text-white ml-1">60s</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="adjustRestTimer(30)" class="px-2.5 py-1 bg-cyan-800 hover:bg-cyan-700 text-white rounded-lg font-medium text-[11px]">+30s</button>
+      <button onclick="stopRestTimer()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-medium text-[11px]">Skip Rest</button>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+    <section id="tab-content-active" class="space-y-6">
+      <!-- Routine Selector (When no active workout) -->
+      <div id="routine-launcher-view" class="space-y-6">
+        <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-850 border border-slate-800 rounded-3xl p-6 relative overflow-hidden shadow-2xl">
+          <div class="absolute right-0 top-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="max-w-xl space-y-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Custom Push / Pull / Legs Protocol
+            </span>
+            <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">Ready for Today's Training?</h2>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Launch your tailored routine to track weights, completed sets, reps, and automated rest timers in real time.
+            </p>
+          </div>
+        </div>
+
+        <div id="routine-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Active Workout Session View (When workout running) -->
+      <div id="active-session-view" class="hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span id="active-session-icon" class="text-4xl p-2 bg-slate-800/80 rounded-2xl border border-slate-700">💥</span>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 uppercase tracking-wider">In Progress</span>
+                <h2 id="active-session-title" class="text-xl font-black text-white">Push Day</h2>
+              </div>
+              <p id="active-session-subtitle" class="text-xs text-slate-400 mt-0.5">Started recently</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="bg-slate-850 px-4 py-2 rounded-2xl border border-slate-700 text-center">
+              <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Session Time</span>
+              <span id="session-timer-display" class="text-xl font-mono font-black text-emerald-400">00:00</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="toggleSessionPause()" id="pause-session-btn" class="py-2.5 px-3.5 rounded-xl border border-amber-500/40 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 font-bold text-xs flex items-center gap-1.5 transition-all">
+                <i data-lucide="pause" class="w-4 h-4"></i>
+                <span id="pause-btn-text">Pause</span>
+              </button>
+              <button onclick="finishCurrentWorkout()" class="py-2.5 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition-transform active:scale-95">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                <span>Finish Workout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rest Timer Quick Launch Bar -->
+        <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2 text-xs text-slate-300">
+            <i data-lucide="timer" class="w-4 h-4 text-cyan-400"></i>
+            <span class="font-bold text-slate-200">Quick Rest Timers:</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="startCustomRestTimer(30)" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all">30s</button>
+            <button onclick="startCustomRestTimer(60)" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all">60s</button>
+            <button onclick="startCustomRestTimer(90)" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all">90s</button>
+            <button onclick="startCustomRestTimer(120)" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all">2m</button>
+            <button onclick="startCustomRestTimer(180)" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all">3m</button>
+          </div>
+        </div>
+
+        <!-- Active Exercises Container -->
+        <div id="active-exercises-list" class="space-y-5">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Sticky Bottom Save Bar -->
+        <div class="sticky bottom-4 z-20 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-2xl p-4 shadow-2xl flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-400 block font-semibold">Session Total Volume</span>
+            <span id="active-session-volume" class="text-sm font-black text-white">0 kg total volume</span>
+          </div>
+          <button onclick="finishCurrentWorkout()" class="py-3 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/30 transition-transform active:scale-95">
+            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+            <span>Save & Complete Session</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-content-planner" class="hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-white">Weekly Split Schedule</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Your optimized Push, Pull, Leg, and Recovery cycle for peak muscle hypertrophy.</p>
+          </div>
+          <span class="px-3.5 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold flex items-center gap-1.5">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>PPL Split Active</span>
+          </span>
+        </div>
+      </div>
+
+      <div id="planner-schedule-grid" class="grid grid-cols-1 md:grid-cols-7 gap-3">
+        <!-- Populated by JavaScript -->
+      </div>
+    </section>
+
+    <section id="tab-content-cardio" class="hidden space-y-6">
+      <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+              Live Cardio Tracker
+            </span>
+            <h2 class="text-2xl font-black text-white mt-1">Outdoor & Treadmill Run</h2>
+            <p class="text-xs text-slate-300">Live distance, running pace, active time, and estimated calorie burn.</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button id="start-run-btn" onclick="startRunTracker()" class="py-3 px-6 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-400 hover:to-blue-400 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-indigo-500/25 transition-transform active:scale-95">
+              <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+              <span>Start Run</span>
+            </button>
+            <button id="save-run-btn" onclick="finishRunTracker()" class="hidden py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition-transform active:scale-95">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              <span>Save Run</span>
+            </button>
+            <button id="cancel-run-btn" onclick="cancelRunTracker()" class="hidden p-3 rounded-xl bg-slate-800 hover:bg-rose-900/40 text-rose-400 border border-slate-700 transition-colors" title="Cancel">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-slate-850/90 border border-slate-750 rounded-2xl p-4 text-center">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Distance</span>
+            <span id="run-distance-disp" class="text-3xl font-mono font-black text-white mt-1 block">0.00</span>
+            <span class="text-xs text-indigo-400 font-semibold">kilometers</span>
+          </div>
+          <div class="bg-slate-850/90 border border-slate-750 rounded-2xl p-4 text-center">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Time</span>
+            <span id="run-time-disp" class="text-3xl font-mono font-black text-emerald-400 mt-1 block">00:00</span>
+            <span class="text-xs text-slate-400 font-semibold">mins : secs</span>
+          </div>
+          <div class="bg-slate-850/90 border border-slate-750 rounded-2xl p-4 text-center">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Avg Pace</span>
+            <span id="run-pace-disp" class="text-3xl font-mono font-black text-amber-400 mt-1 block">0:00</span>
+            <span class="text-xs text-slate-400 font-semibold">min / km</span>
+          </div>
+          <div class="bg-slate-850/90 border border-slate-750 rounded-2xl p-4 text-center">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Calories</span>
+            <span id="run-cals-disp" class="text-3xl font-mono font-black text-rose-400 mt-1 block">0</span>
+            <span class="text-xs text-slate-400 font-semibold">kcal burned</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="font-bold text-lg text-white flex items-center gap-2">
+          <i data-lucide="footprints" class="w-5 h-5 text-indigo-400"></i>
+          <span>Cardio History</span>
+        </h3>
+        <div id="runs-history-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-content-history" class="hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white">Workout History & Logs</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Your recorded Push, Pull, and Leg sessions with weights and reps.</p>
+        </div>
+        <span id="history-total-count-badge" class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
+          4 Total Sessions
+        </span>
+      </div>
+
+      <div id="workouts-history-container" class="space-y-4">
+        <!-- Populated by JavaScript -->
+      </div>
+    </section>
+
+    <section id="tab-content-analytics" class="hidden space-y-6">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <span class="text-[11px] uppercase font-bold text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i> Workouts
+          </span>
+          <span id="stat-total-workouts" class="text-2xl sm:text-3xl font-black text-white mt-1 block">4</span>
+          <span class="text-xs text-slate-400 mt-1 block">Completed sessions</span>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <span class="text-[11px] uppercase font-bold text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i> Total Volume
+          </span>
+          <span id="stat-total-volume" class="text-2xl sm:text-3xl font-black text-amber-400 mt-1 block">14,590</span>
+          <span class="text-xs text-slate-400 mt-1 block">kg total lifted</span>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <span class="text-[11px] uppercase font-bold text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="footprints" class="w-3.5 h-3.5 text-indigo-400"></i> Cardio
+          </span>
+          <span id="stat-total-cardio" class="text-2xl sm:text-3xl font-black text-indigo-400 mt-1 block">8.5</span>
+          <span class="text-xs text-slate-400 mt-1 block">km total distance</span>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+          <span class="text-[11px] uppercase font-bold text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="trophy" class="w-3.5 h-3.5 text-yellow-400"></i> Bench Record
+          </span>
+          <span id="stat-bench-pr" class="text-2xl sm:text-3xl font-black text-white mt-1 block">50 kg</span>
+          <span class="text-xs text-slate-400 mt-1 block">Flat Barbell Max</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+        <h3 class="font-bold text-lg text-white flex items-center gap-2">
+          <i data-lucide="trophy" class="w-5 h-5 text-amber-400"></i>
+          <span>Personal Records (PRs)</span>
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-slate-850 p-4 rounded-2xl border border-slate-800 space-y-1">
+            <span class="text-xs text-slate-400 font-medium">Flat Barbell Bench</span>
+            <div id="pr-bench" class="text-2xl font-black text-white">50 kg</div>
+            <p class="text-[11px] text-emerald-400">12-15 reps continuous</p>
+          </div>
+          <div class="bg-slate-850 p-4 rounded-2xl border border-slate-800 space-y-1">
+            <span class="text-xs text-slate-400 font-medium">Incline Barbell Press</span>
+            <div id="pr-incline" class="text-2xl font-black text-white">50 kg</div>
+            <p class="text-[11px] text-emerald-400">10-12 reps continuous</p>
+          </div>
+          <div class="bg-slate-850 p-4 rounded-2xl border border-slate-800 space-y-1">
+            <span class="text-xs text-slate-400 font-medium">Barbell Back Squats</span>
+            <div id="pr-squat" class="text-2xl font-black text-white">30 kg</div>
+            <p class="text-[11px] text-emerald-400">10 reps parallel depth</p>
+          </div>
+          <div class="bg-slate-850 p-4 rounded-2xl border border-slate-800 space-y-1">
+            <span class="text-xs text-slate-400 font-medium">Romanian Deadlifts (RDLs)</span>
+            <div id="pr-rdl" class="text-2xl font-black text-white">30 kg</div>
+            <p class="text-[11px] text-emerald-400">10 reps strict hinge</p>
+          </div>
+          <div class="bg-slate-850 p-4 rounded-2xl border border-slate-800 space-y-1">
+            <span class="text-xs text-slate-400 font-medium">Single-Arm DB Rows</span>
+            <div id="pr-row" class="text-2xl font-black text-white">50 lbs</div>
+            <p class="text-[11px] text-emerald-400">15 reps per arm</p>
+          </div>
+          <div class="bg-slate-850 p-4 rounded-2xl border border-slate-800 space-y-1">
+            <span class="text-xs text-slate-400 font-medium">Plank Core Endurance</span>
+            <div class="text-2xl font-black text-white">60 seconds</div>
+            <p class="text-[11px] text-emerald-400">3 continuous rounds</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-emerald-500/50 text-emerald-300 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-semibold">
+    <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toast-text">Notification message</span>
+  </div>
+
+  <script>
+    const TAILORED_ROUTINES = [
+      {
+        id: 'push-day',
+        title: 'Push Day (Chest, Shoulders & Triceps)',
+        category: 'Push',
+        icon: '💥',
+        color: 'from-amber-500 to-orange-600',
+        description: 'Target chest development, front and side delts, and tricep lockouts.',
+        exercises: [
+          {
+            id: 'ex-1',
+            name: 'Flat Barbell Bench Press',
+            targetSets: 3,
+            targetReps: '8 to 12 reps',
+            defaultUnit: 'kg',
+            formCue: 'Plant feet flat, retract scapula, control bar to mid-chest, and press smoothly.',
+            sets: [
+              { setNum: 1, weight: 40, reps: 15, completed: false, unit: 'kg' },
+              { setNum: 2, weight: 40, reps: 15, completed: false, unit: 'kg' },
+              { setNum: 3, weight: 40, reps: 15, completed: false, unit: 'kg' }
+            ]
+          },
+          {
+            id: 'ex-2',
+            name: 'Incline Barbell Press',
+            targetSets: 3,
+            targetReps: '10 to 12 reps',
+            defaultUnit: 'kg',
+            formCue: 'Set bench to 30-45 degrees, drive through feet, press bar over upper chest.',
+            sets: [
+              { setNum: 1, weight: 40, reps: 10, completed: false, unit: 'kg' },
+              { setNum: 2, weight: 40, reps: 12, completed: false, unit: 'kg' },
+              { setNum: 3, weight: 40, reps: 12, completed: false, unit: 'kg' }
+            ]
+          },
+          {
+            id: 'ex-3',
+            name: 'Dumbbell Lateral Raises',
+            targetSets: 3,
+            targetReps: '12 to 15 reps',
+            defaultUnit: 'lbs',
+            formCue: 'Slight bend at elbows, lead with elbows up to parallel, avoid swinging.',
+            sets: [
+              { setNum: 1, weight: 20, reps: 10, completed: false, unit: 'lbs' },
+              { setNum: 2, weight: 20, reps: 12, completed: false, unit: 'lbs' },
+              { setNum: 3, weight: 20, reps: 12, completed: false, unit: 'lbs' }
+            ]
+          },
+          {
+            id: 'ex-4',
+            name: 'Overhead Tricep Extensions',
+            targetSets: 3,
+            targetReps: '10 to 12 reps',
+            defaultUnit: 'lbs',
+            formCue: 'Keep elbows pointing forward, lower weight under control behind your head.',
+            sets: [
+              { setNum: 1, weight: 50, reps: 15, completed: false, unit: 'lbs' },
+              { setNum: 2, weight: 50, reps: 12, completed: false, unit: 'lbs' },
+              { setNum: 3, weight: 50, reps: 12, completed: false, unit: 'lbs' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'pull-day',
+        title: 'Pull Day (Back & Biceps)',
+        category: 'Pull',
+        icon: '🎣',
+        color: 'from-blue-600 to-cyan-600',
+        description: 'Build back thickness, lat width, rear delts, and complete bicep development.',
+        exercises: [
+          {
+            id: 'ex-5',
+            name: 'Single-Arm Dumbbell Rows (Flat Bench)',
+            targetSets: 3,
+            targetReps: '12 to 15 reps',
+            defaultUnit: 'lbs',
+            formCue: 'Place knee and hand on flat bench, keep back flat, pull elbow toward hip.',
+            sets: [
+              { setNum: 1, weight: 50, reps: 15, completed: false, unit: 'lbs' },
+              { setNum: 2, weight: 50, reps: 15, completed: false, unit: 'lbs' },
+              { setNum: 3, weight: 50, reps: 15, completed: false, unit: 'lbs' }
+            ]
+          },
+          {
+            id: 'ex-6',
+            name: 'Cable Lat Pulldowns',
+            targetSets: 3,
+            targetReps: '10 to 12 reps',
+            defaultUnit: 'kg',
+            formCue: 'Chest lifted, drive elbows down to ribs, squeeze lats hard at bottom.',
+            sets: [
+              { setNum: 1, weight: 30, reps: 20, completed: false, unit: 'kg' },
+              { setNum: 2, weight: 40, reps: 12, completed: false, unit: 'kg' },
+              { setNum: 3, weight: 40, reps: 12, completed: false, unit: 'kg' }
+            ]
+          },
+          {
+            id: 'ex-7',
+            name: 'Cable Face Pulls',
+            targetSets: 3,
+            targetReps: '12 to 15 reps',
+            defaultUnit: 'kg',
+            formCue: 'Set rope at eye level, pull center towards face while rotating knuckles back.',
+            sets: [
+              { setNum: 1, weight: 30, reps: 15, completed: false, unit: 'kg' },
+              { setNum: 2, weight: 30, reps: 15, completed: false, unit: 'kg' },
+              { setNum: 3, weight: 30, reps: 15, completed: false, unit: 'kg' }
+            ]
+          },
+          {
+            id: 'ex-8',
+            name: 'Arm Finisher Superset (Bicep & Hammer Curls)',
+            targetSets: 3,
+            targetReps: '10 to 12 reps each',
+            defaultUnit: 'lbs',
+            formCue: 'Pin elbows to torso, perform strict bicep curls followed by neutral hammer curls.',
+            sets: [
+              { setNum: 1, weight: 25, reps: 12, completed: false, unit: 'lbs', note: '12 Bicep + 12 Hammer' },
+              { setNum: 2, weight: 25, reps: 12, completed: false, unit: 'lbs', note: '12 Bicep + 12 Hammer' },
+              { setNum: 3, weight: 25, reps: 12, completed: false, unit: 'lbs', note: '12 Bicep + 12 Hammer' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'leg-day',
+        title: 'Leg Day (Quads, Hamstrings, Calves & Core)',
+        category: 'Legs',
+        icon: '🦵',
+        color: 'from-emerald-500 to-teal-700',
+        description: 'Build lower body power, single leg balance, and core stability.',
+        exercises: [
+          {
+            id: 'ex-9',
+            name: 'Barbell Back Squats',
+            targetSets: 3,
+            targetReps: '8 to 10 reps',
+            defaultUnit: 'kg',
+            formCue: 'Brace core, keep chest high, squat down to parallel depth, drive through mid-foot.',
+            sets: [
+              { setNum: 1, weight: 30, reps: 10, completed: false, unit: 'kg' },
+              { setNum: 2, weight: 30, reps: 10, completed: false, unit: 'kg' },
+              { setNum: 3, weight: 30, reps: 10, completed: false, unit: 'kg' }
+            ]
+          },
+          {
+            id: 'ex-10',
+            name: 'Romanian Deadlifts (RDLs)',
+            targetSets: 3,
+            targetReps: '10 to 12 reps',
+            defaultUnit: 'kg',
+            formCue: 'Hinge hips backwards with soft knees, feel deep hamstring stretch, drive hips forward.',
+            sets: [
+              { setNum: 1, weight: 30, reps: 10, completed: false, unit: 'kg' },
+              { setNum: 2, weight: 30, reps: 10, completed: false, unit: 'kg' },
+              { setNum: 3, weight: 30, reps: 10, completed: false, unit: 'kg' }
+            ]
+          },
+          {
+            id: 'ex-11',
+            name: 'Bulgarian Split Squats',
+            targetSets: 3,
+            targetReps: '10 to 12 reps per leg',
+            defaultUnit: 'kg',
+            formCue: 'Elevate back foot on bench, lower front thigh to parallel, drive through front heel.',
+            sets: [
+              { setNum: 1, weight: 0, reps: 12, completed: false, unit: 'kg', note: 'Bodyweight' },
+              { setNum: 2, weight: 0, reps: 12, completed: false, unit: 'kg', note: 'Bodyweight' },
+              { setNum: 3, weight: 0, reps: 12, completed: false, unit: 'kg', note: 'Bodyweight' }
+            ]
+          },
+          {
+            id: 'ex-12',
+            name: 'Standing Calf Raises (5s Peak Pause)',
+            targetSets: 3,
+            targetReps: '10 reps with pause',
+            defaultUnit: 'lbs',
+            formCue: 'Drive onto balls of feet, hold 5 full seconds at the peak contraction of every rep.',
+            sets: [
+              { setNum: 1, weight: 50, reps: 10, completed: false, unit: 'lbs', note: '5s Peak Pause' },
+              { setNum: 2, weight: 50, reps: 10, completed: false, unit: 'lbs', note: '5s Peak Pause' },
+              { setNum: 3, weight: 50, reps: 10, completed: false, unit: 'lbs', note: '5s Peak Pause' }
+            ]
+          },
+          {
+            id: 'ex-13',
+            name: 'Plank Hold (Core)',
+            targetSets: 3,
+            targetReps: '60 seconds hold',
+            defaultUnit: 'sec',
+            formCue: 'Forearms on floor, straight line head to heels, pull belly to spine.',
+            sets: [
+              { setNum: 1, weight: 0, reps: 60, completed: false, unit: 'sec', note: '60s Hold' },
+              { setNum: 2, weight: 0, reps: 60, completed: false, unit: 'sec', note: '60s Hold' },
+              { setNum: 3, weight: 0, reps: 60, completed: false, unit: 'sec', note: '60s Hold' }
+            ]
+          }
+        ]
+      }
+    ];
+
+    let workouts = [
+      {
+        id: 'seed-workout-1',
+        title: 'Push Day (Session 1)',
+        category: 'Push',
+        completedAt: '2026-08-22T10:30:00.000Z',
+        durationMinutes: 48,
+        totalVolumeKg: 3840,
+        exercises: [
+          { name: 'Flat Barbell Bench Press', sets: [{ setNum: 1, weight: 50, reps: 12, unit: 'kg' }, { setNum: 2, weight: 50, reps: 12, unit: 'kg' }, { setNum: 3, weight: 50, reps: 12, unit: 'kg' }] },
+          { name: 'Incline Barbell Press', sets: [{ setNum: 1, weight: 50, reps: 10, unit: 'kg' }, { setNum: 2, weight: 50, reps: 10, unit: 'kg' }, { setNum: 3, weight: 50, reps: 10, unit: 'kg' }] },
+          { name: 'Dumbbell Lateral Raises', sets: [{ setNum: 1, weight: 25, reps: 12, unit: 'lbs' }, { setNum: 2, weight: 25, reps: 12, unit: 'lbs' }, { setNum: 3, weight: 25, reps: 12, unit: 'lbs' }] },
+          { name: 'Overhead Tricep Extensions', sets: [{ setNum: 1, weight: 50, reps: 15, unit: 'lbs' }, { setNum: 2, weight: 50, reps: 12, unit: 'lbs' }, { setNum: 3, weight: 50, reps: 12, unit: 'lbs' }] }
+        ]
+      },
+      {
+        id: 'seed-workout-2',
+        title: 'Pull Day (Session 1)',
+        category: 'Pull',
+        completedAt: '2026-08-24T11:00:00.000Z',
+        durationMinutes: 52,
+        totalVolumeKg: 4200,
+        exercises: [
+          { name: 'Single-Arm Dumbbell Rows (Flat Bench)', sets: [{ setNum: 1, weight: 50, reps: 15, unit: 'lbs' }, { setNum: 2, weight: 50, reps: 15, unit: 'lbs' }, { setNum: 3, weight: 50, reps: 15, unit: 'lbs' }] },
+          { name: 'Cable Lat Pulldowns', sets: [{ setNum: 1, weight: 30, reps: 20, unit: 'kg' }, { setNum: 2, weight: 40, reps: 12, unit: 'kg' }, { setNum: 3, weight: 40, reps: 12, unit: 'kg' }] },
+          { name: 'Cable Face Pulls', sets: [{ setNum: 1, weight: 30, reps: 15, unit: 'kg' }, { setNum: 2, weight: 30, reps: 15, unit: 'kg' }, { setNum: 3, weight: 30, reps: 15, unit: 'kg' }] },
+          { name: 'Arm Finisher Superset', sets: [{ setNum: 1, weight: 25, reps: 12, unit: 'lbs' }, { setNum: 2, weight: 25, reps: 12, unit: 'lbs' }, { setNum: 3, weight: 25, reps: 12, unit: 'lbs' }] }
+        ]
+      },
+      {
+        id: 'seed-workout-3',
+        title: 'Leg Day (Session 1)',
+        category: 'Legs',
+        completedAt: '2026-08-26T09:45:00.000Z',
+        durationMinutes: 55,
+        totalVolumeKg: 2900,
+        exercises: [
+          { name: 'Barbell Back Squats', sets: [{ setNum: 1, weight: 30, reps: 10, unit: 'kg' }, { setNum: 2, weight: 30, reps: 10, unit: 'kg' }, { setNum: 3, weight: 30, reps: 10, unit: 'kg' }] },
+          { name: 'Romanian Deadlifts (RDLs)', sets: [{ setNum: 1, weight: 30, reps: 10, unit: 'kg' }, { setNum: 2, weight: 30, reps: 10, unit: 'kg' }, { setNum: 3, weight: 30, reps: 10, unit: 'kg' }] },
+          { name: 'Bulgarian Split Squats', sets: [{ setNum: 1, weight: 0, reps: 12, unit: 'kg' }, { setNum: 2, weight: 0, reps: 12, unit: 'kg' }, { setNum: 3, weight: 0, reps: 12, unit: 'kg' }] },
+          { name: 'Standing Calf Raises', sets: [{ setNum: 1, weight: 50, reps: 10, unit: 'lbs' }, { setNum: 2, weight: 50, reps: 10, unit: 'lbs' }, { setNum: 3, weight: 50, reps: 10, unit: 'lbs' }] },
+          { name: 'Plank Hold', sets: [{ setNum: 1, weight: 0, reps: 60, unit: 'sec' }, { setNum: 2, weight: 0, reps: 60, unit: 'sec' }, { setNum: 3, weight: 0, reps: 60, unit: 'sec' }] }
+        ]
+      },
+      {
+        id: 'seed-workout-4',
+        title: 'Push Day (Session 2)',
+        category: 'Push',
+        completedAt: '2026-08-28T14:15:00.000Z',
+        durationMinutes: 50,
+        totalVolumeKg: 3650,
+        exercises: [
+          { name: 'Flat Barbell Bench Press', sets: [{ setNum: 1, weight: 40, reps: 15, unit: 'kg' }, { setNum: 2, weight: 40, reps: 15, unit: 'kg' }, { setNum: 3, weight: 40, reps: 15, unit: 'kg' }] },
+          { name: 'Incline Barbell Press', sets: [{ setNum: 1, weight: 40, reps: 10, unit: 'kg' }, { setNum: 2, weight: 40, reps: 12, unit: 'kg' }, { setNum: 3, weight: 40, reps: 12, unit: 'kg' }] },
+          { name: 'Dumbbell Lateral Raises', sets: [{ setNum: 1, weight: 20, reps: 10, unit: 'lbs' }, { setNum: 2, weight: 20, reps: 12, unit: 'lbs' }, { setNum: 3, weight: 20, reps: 12, unit: 'lbs' }] },
+          { name: 'Overhead Tricep Extensions', sets: [{ setNum: 1, weight: 50, reps: 15, unit: 'lbs' }, { setNum: 2, weight: 50, reps: 12, unit: 'lbs' }, { setNum: 3, weight: 50, reps: 12, unit: 'lbs' }] }
+        ]
+      }
+    ];
+
+    let runs = [
+      {
+        id: 'seed-run-1',
+        title: 'Morning Recovery Jog',
+        completedAt: '2026-08-25T07:30:00.000Z',
+        distanceKm: 3.5,
+        durationSeconds: 1260,
+        paceMinPerKm: '6:00',
+        calories: 235,
+        notes: 'Easy pace on flat trail.'
+      },
+      {
+        id: 'seed-run-2',
+        title: 'Interval Cardio Session',
+        completedAt: '2026-08-27T08:00:00.000Z',
+        distanceKm: 5.0,
+        durationSeconds: 1680,
+        paceMinPerKm: '5:36',
+        calories: 360,
+        notes: '5x 100m strides near the finish.'
+      }
+    ];
+
+    const WEEKLY_PLAN = [
+      { day: 'Monday', routineId: 'push-day', routineTitle: 'Push Day', focus: 'Chest, Shoulders & Triceps', rest: false },
+      { day: 'Tuesday', routineId: 'pull-day', routineTitle: 'Pull Day', focus: 'Back, Lat Width & Biceps', rest: false },
+      { day: 'Wednesday', routineId: 'leg-day', routineTitle: 'Leg Day', focus: 'Quads, Hamstrings & Calves', rest: false },
+      { day: 'Thursday', routineId: 'rest', routineTitle: 'Active Recovery / Run', focus: 'Light Cardio & Mobility', rest: true },
+      { day: 'Friday', routineId: 'push-day', routineTitle: 'Push Day 2', focus: 'Chest & Shoulder Hypertrophy', rest: false },
+      { day: 'Saturday', routineId: 'pull-day', routineTitle: 'Pull Day 2', focus: 'Upper Back & Arm Superset', rest: false },
+      { day: 'Sunday', routineId: 'rest', routineTitle: 'Full Rest Day', focus: 'Sleep & Regeneration', rest: true }
+    ];
+
+    let activeSession = null;
+    let sessionTimerInterval = null;
+    let sessionSeconds = 0;
+    let isSessionPaused = false;
+
+    let restTimerInterval = null;
+    let restSeconds = 0;
+
+    let runTimerInterval = null;
+    let runSeconds = 0;
+    let runDistance = 0;
+    let isRunActive = false;
+
+    // --- STREAMING_CHUNK:Implementing sound synthesizers and helpers ---
+    function playBeep(freq = 600, duration = 0.15) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function formatTime(secs) {
+      const m = Math.floor(secs / 60).toString().padStart(2, '0');
+      const s = (secs % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function formatDate(isoStr) {
+      if (!isoStr) return 'Just now';
+      return new Date(isoStr).toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    function showToast(msg) {
+      const el = document.getElementById('toast-container');
+      const text = document.getElementById('toast-text');
+      text.innerText = msg;
+      el.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        el.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // --- STREAMING_CHUNK:Handling UI navigation and tab switching ---
+    function switchTab(tabKey) {
+      document.querySelectorAll('[id^="tab-content-"]').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById(`tab-content-${tabKey}`);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-emerald-500', 'text-slate-950', 'shadow-md', 'shadow-emerald-500/20');
+        btn.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-850');
+      });
+
+      const activeBtn = document.getElementById(`tab-btn-${tabKey}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-850');
+        activeBtn.classList.add('bg-emerald-500', 'text-slate-950', 'shadow-md', 'shadow-emerald-500/20');
+      }
+
+      if (tabKey === 'analytics') renderAnalytics();
+      if (tabKey === 'history') renderHistory();
+    }
+
+    // --- STREAMING_CHUNK:Rendering routine cards and workout launcher ---
+    function renderRoutineLauncher() {
+      const container = document.getElementById('routine-cards-grid');
+      container.innerHTML = TAILORED_ROUTINES.map(r => `
+        <div class="group bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-3xl p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-2xl">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-3xl p-2 rounded-2xl bg-slate-800/80 border border-slate-700">${r.icon}</span>
+              <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">${r.category}</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-white group-hover:text-emerald-400 transition-colors">${r.title}</h3>
+              <p class="text-xs text-slate-400 mt-1 line-clamp-2">${r.description}</p>
+            </div>
+            <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Included Exercises (${r.exercises.length}):</p>
+              <ul class="space-y-1">
+                ${r.exercises.map(ex => `
+                  <li class="text-xs text-slate-300 flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span class="truncate">${ex.name}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          </div>
+          <button onclick="startRoutine('${r.id}')" class="mt-6 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-transform active:scale-95">
+            <i data-lucide="play" class="w-4 h-4 fill-slate-950"></i>
+            <span>Start ${r.category} Workout</span>
+          </button>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // --- STREAMING_CHUNK:Managing active workout session lifecycle ---
+    function startRoutine(routineId) {
+      const template = TAILORED_ROUTINES.find(r => r.id === routineId);
+      if (!template) return;
+
+      activeSession = JSON.parse(JSON.stringify(template));
+      sessionSeconds = 0;
+      isSessionPaused = false;
+
+      document.getElementById('routine-launcher-view').classList.add('hidden');
+      document.getElementById('active-session-view').classList.remove('hidden');
+      document.getElementById('header-active-badge').classList.remove('hidden');
+      document.getElementById('header-active-badge').classList.add('flex');
+
+      document.getElementById('active-session-icon').innerText = activeSession.icon;
+      document.getElementById('active-session-title').innerText = activeSession.title;
+      document.getElementById('active-session-subtitle').innerText = `Started at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
+      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+      sessionTimerInterval = setInterval(() => {
+        if (!isSessionPaused) {
+          sessionSeconds++;
+          const formatted = formatTime(sessionSeconds);
+          document.getElementById('session-timer-display').innerText = formatted;
+          document.getElementById('header-session-time').innerText = `Active: ${formatted}`;
+        }
+      }, 1000);
+
+      renderActiveExercises();
+      showToast(`🚀 Started ${activeSession.title}!`);
+    }
+
+    // --- STREAMING_CHUNK:Rendering live exercise set logs table ---
+    function renderActiveExercises() {
+      if (!activeSession) return;
+      const list = document.getElementById('active-exercises-list');
+
+      let totalVolume = 0;
+      activeSession.exercises.forEach(ex => {
+        ex.sets.forEach(s => {
+          if (s.completed && s.unit !== 'sec') {
+            const wKg = s.unit === 'lbs' ? s.weight * 0.453592 : s.weight;
+            totalVolume += wKg * (s.reps || 0);
+          }
+        });
+      });
+      document.getElementById('active-session-volume').innerText = `${Math.round(totalVolume).toLocaleString()} kg total volume`;
+
+      list.innerHTML = activeSession.exercises.map((ex, exIdx) => `
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+          <div class="p-4 bg-slate-850 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">${exIdx + 1}</span>
+                <h3 class="font-bold text-base text-white">${ex.name}</h3>
+              </div>
+              <p class="text-xs text-slate-400 pl-8 flex items-center gap-1.5">
+                <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i>
+                <span>${ex.formCue}</span>
+              </p>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold">Target: ${ex.targetReps}</span>
+          </div>
+
+          <div class="p-4 overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-800 pb-2">
+                  <th class="py-2 px-2 font-bold">SET</th>
+                  <th class="py-2 px-2 font-bold">WEIGHT (${ex.defaultUnit})</th>
+                  <th class="py-2 px-2 font-bold">REPS / TIME</th>
+                  <th class="py-2 px-2 font-bold">NOTES / CUE</th>
+                  <th class="py-2 px-2 font-bold text-center">STATUS</th>
+                  <th class="py-2 px-1 text-right">ACTION</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60">
+                ${ex.sets.map((s, sIdx) => `
+                  <tr class="${s.completed ? 'bg-emerald-500/5' : 'hover:bg-slate-850/40'}">
+                    <td class="py-2.5 px-2 font-black text-slate-300">#${s.setNum}</td>
+                    <td class="py-2 px-2">
+                      <div class="flex items-center gap-1.5">
+                        <input type="number" value="${s.weight}" onchange="updateSetVal(${exIdx}, ${sIdx}, 'weight', this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-xl px-2 py-1 text-white font-mono font-bold focus:outline-none focus:border-emerald-500">
+                        <select onchange="updateSetVal(${exIdx}, ${sIdx}, 'unit', this.value)" class="bg-slate-800 border border-slate-700 rounded-xl px-1.5 py-1 text-slate-300 text-[11px] focus:outline-none">
+                          <option value="kg" ${s.unit === 'kg' ? 'selected' : ''}>kg</option>
+                          <option value="lbs" ${s.unit === 'lbs' ? 'selected' : ''}>lbs</option>
+                          <option value="sec" ${s.unit === 'sec' ? 'selected' : ''}>sec</option>
+                        </select>
+                      </div>
+                    </td>
+                    <td class="py-2 px-2">
+                      <input type="number" value="${s.reps}" onchange="updateSetVal(${exIdx}, ${sIdx}, 'reps', this.value)" class="w-16 bg-slate-800 border border-slate-700 rounded-xl px-2 py-1 text-white font-mono font-bold focus:outline-none focus:border-emerald-500">
+                    </td>
+                    <td class="py-2 px-2">
+                      <input type="text" placeholder="Note" value="${s.note || ''}" onchange="updateSetVal(${exIdx}, ${sIdx}, 'note', this.value)" class="w-full max-w-[140px] bg-slate-800 border border-slate-700 rounded-xl px-2 py-1 text-slate-200 text-xs focus:outline-none">
+                    </td>
+                    <td class="py-2 px-2 text-center">
+                      <button onclick="toggleSet(${exIdx}, ${sIdx})" class="px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 mx-auto transition-all ${s.completed ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'}">
+                        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                        <span>${s.completed ? 'Done' : 'Check'}</span>
+                      </button>
+                    </td>
+                    <td class="py-2 px-1 text-right">
+                      <button onclick="removeSet(${exIdx}, ${sIdx})" class="p-1.5 text-slate-500 hover:text-rose-400 rounded-lg hover:bg-slate-800 transition-colors">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+
+            <div class="mt-3 pt-2 border-t border-slate-800 flex items-center justify-between">
+              <button onclick="addSet(${exIdx})" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold text-xs flex items-center gap-1.5 border border-slate-700 transition-colors">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>Add Set</span>
+              </button>
+              <span class="text-[11px] text-slate-400 font-medium">${ex.sets.filter(s => s.completed).length} of ${ex.sets.length} sets completed</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // --- STREAMING_CHUNK:Implementing set modification and rest timers ---
+    function updateSetVal(exIdx, sIdx, field, val) {
+      if (!activeSession) return;
+      activeSession.exercises[exIdx].sets[sIdx][field] = field === 'note' || field === 'unit' ? val : Number(val);
+      renderActiveExercises();
+    }
+
+    function toggleSet(exIdx, sIdx) {
+      if (!activeSession) return;
+      const target = activeSession.exercises[exIdx].sets[sIdx];
+      target.completed = !target.completed;
+      if (target.completed) {
+        playBeep(520, 0.15);
+        startCustomRestTimer(60);
+        showToast(`Set ${sIdx + 1} logged! 60s rest started.`);
+      }
+      renderActiveExercises();
+    }
+
+    function addSet(exIdx) {
+      if (!activeSession) return;
+      const sets = activeSession.exercises[exIdx].sets;
+      const last = sets[sets.length - 1];
+      sets.push({
+        setNum: sets.length + 1,
+        weight: last ? last.weight : 20,
+        reps: last ? last.reps : 10,
+        completed: false,
+        unit: last ? last.unit : 'kg'
+      });
+      renderActiveExercises();
+    }
+
+    function removeSet(exIdx, sIdx) {
+      if (!activeSession) return;
+      if (activeSession.exercises[exIdx].sets.length <= 1) return;
+      activeSession.exercises[exIdx].sets.splice(sIdx, 1);
+      activeSession.exercises[exIdx].sets.forEach((s, idx) => s.setNum = idx + 1);
+      renderActiveExercises();
+    }
+
+    function toggleSessionPause() {
+      isSessionPaused = !isSessionPaused;
+      document.getElementById('pause-btn-text').innerText = isSessionPaused ? 'Resume' : 'Pause';
+    }
+
+    function startCustomRestTimer(seconds) {
+      if (restTimerInterval) clearInterval(restTimerInterval);
+      restSeconds = seconds;
+      const bar = document.getElementById('rest-timer-bar');
+      bar.classList.remove('hidden');
+      bar.classList.add('flex');
+      document.getElementById('rest-countdown-text').innerText = `${restSeconds}s`;
+
+      restTimerInterval = setInterval(() => {
+        restSeconds--;
+        document.getElementById('rest-countdown-text').innerText = `${restSeconds}s`;
+        if (restSeconds <= 0) {
+          clearInterval(restTimerInterval);
+          bar.classList.add('hidden');
+          bar.classList.remove('flex');
+          playBeep(880, 0.3);
+          setTimeout(() => playBeep(1100, 0.4), 300);
+          showToast('⏱️ Rest finished! Ready for next set.');
+        } else if (restSeconds <= 3) {
+          playBeep(440, 0.1);
+        }
+      }, 1000);
+    }
+
+    function adjustRestTimer(delta) {
+      restSeconds += delta;
+      document.getElementById('rest-countdown-text').innerText = `${restSeconds}s`;
+    }
+
+    function stopRestTimer() {
+      if (restTimerInterval) clearInterval(restTimerInterval);
+      const bar = document.getElementById('rest-timer-bar');
+      bar.classList.add('hidden');
+      bar.classList.remove('flex');
+    }
+
+    // --- STREAMING_CHUNK:Handling workout completion and storage ---
+    function finishCurrentWorkout() {
+      if (!activeSession) return;
+      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+      stopRestTimer();
+
+      let calculatedVol = 0;
+      activeSession.exercises.forEach(ex => {
+        ex.sets.forEach(s => {
+          if (s.completed && s.unit !== 'sec') {
+            const wKg = s.unit === 'lbs' ? s.weight * 0.453592 : s.weight;
+            calculatedVol += wKg * (s.reps || 0);
+          }
+        });
+      });
+
+      const newRecord = {
+        id: `workout-${Date.now()}`,
+        title: activeSession.title,
+        category: activeSession.category,
+        completedAt: new Date().toISOString(),
+        durationMinutes: Math.max(1, Math.round(sessionSeconds / 60)),
+        totalVolumeKg: Math.round(calculatedVol),
+        exercises: activeSession.exercises.map(ex => ({
+          name: ex.name,
+          sets: ex.sets.map(s => ({
+            setNum: s.setNum,
+            weight: Number(s.weight) || 0,
+            reps: Number(s.reps) || 0,
+            unit: s.unit || 'kg',
+            note: s.note || ''
+          }))
+        }))
+      };
+
+      workouts.unshift(newRecord);
+
+      activeSession = null;
+      document.getElementById('active-session-view').classList.add('hidden');
+      document.getElementById('routine-launcher-view').classList.remove('hidden');
+      document.getElementById('header-active-badge').classList.add('hidden');
+      document.getElementById('header-active-badge').classList.remove('flex');
+
+      showToast('🎉 Workout saved to your session logs!');
+      switchTab('history');
+    }
+
+    // --- STREAMING_CHUNK:Implementing live GPS run simulator and cardio tracking ---
+    function startRunTracker() {
+      isRunActive = true;
+      runSeconds = 0;
+      runDistance = 0;
+
+      document.getElementById('start-run-btn').classList.add('hidden');
+      document.getElementById('save-run-btn').classList.remove('hidden');
+      document.getElementById('cancel-run-btn').classList.remove('hidden');
+
+      if (runTimerInterval) clearInterval(runTimerInterval);
+      runTimerInterval = setInterval(() => {
+        runSeconds++;
+        runDistance += 0.0028;
+        const cals = Math.floor((runSeconds / 60) * 11.5);
+
+        document.getElementById('run-time-disp').innerText = formatTime(runSeconds);
+        document.getElementById('run-distance-disp').innerText = runDistance.toFixed(2);
+        document.getElementById('run-cals-disp').innerText = cals;
+
+        const paceMin = runDistance > 0 ? (runSeconds / 60 / runDistance) : 0;
+        const pM = Math.floor(paceMin);
+        const pS = Math.round((paceMin - pM) * 60);
+        document.getElementById('run-pace-disp').innerText = `${pM}:${pS.toString().padStart(2, '0')}`;
+      }, 1000);
+
+      showToast('🏃 Cardio run tracker started!');
+    }
+
+    function finishRunTracker() {
+      if (runTimerInterval) clearInterval(runTimerInterval);
+      const paceMin = runDistance > 0 ? (runSeconds / 60 / runDistance) : 0;
+      const pM = Math.floor(paceMin);
+      const pS = Math.round((paceMin - pM) * 60);
+      const paceStr = `${pM}:${pS.toString().padStart(2, '0')}`;
+
+      const runLog = {
+        id: `run-${Date.now()}`,
+        title: runDistance > 4 ? 'Endurance Run' : 'Cardio Run / Jog',
+        completedAt: new Date().toISOString(),
+        distanceKm: +runDistance.toFixed(2),
+        durationSeconds: runSeconds,
+        paceMinPerKm: paceStr,
+        calories: Math.floor((runSeconds / 60) * 11.5),
+        notes: 'Tracked live session'
+      };
+
+      runs.unshift(runLog);
+      cancelRunTracker();
+      renderRuns();
+      showToast('🏃 Run session logged successfully!');
+    }
+
+    function cancelRunTracker() {
+      if (runTimerInterval) clearInterval(runTimerInterval);
+      isRunActive = false;
+      document.getElementById('start-run-btn').classList.remove('hidden');
+      document.getElementById('save-run-btn').classList.add('hidden');
+      document.getElementById('cancel-run-btn').classList.add('hidden');
+
+      document.getElementById('run-time-disp').innerText = '00:00';
+      document.getElementById('run-distance-disp').innerText = '0.00';
+      document.getElementById('run-cals-disp').innerText = '0';
+      document.getElementById('run-pace-disp').innerText = '0:00';
+    }
+
+    // --- STREAMING_CHUNK:Rendering history logs, planner, and analytics ---
+    function renderHistory() {
+      const container = document.getElementById('workouts-history-container');
+      document.getElementById('history-tab-label').innerText = `History Logs (${workouts.length})`;
+      document.getElementById('history-total-count-badge').innerText = `${workouts.length} Total Sessions`;
+
+      container.innerHTML = workouts.map(w => `
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-lg space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl p-2 rounded-2xl bg-slate-800 border border-slate-700">
+                ${w.category === 'Push' ? '💥' : w.category === 'Pull' ? '🎣' : '🦵'}
+              </span>
+              <div>
+                <h3 class="font-bold text-lg text-white">${w.title}</h3>
+                <p class="text-xs text-slate-400">${formatDate(w.completedAt)} · ${w.durationMinutes} mins duration</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl">
+                ${w.totalVolumeKg ? w.totalVolumeKg.toLocaleString() : 0} kg volume
+              </span>
+              <button onclick="deleteWorkoutLog('${w.id}')" class="p-1.5 text-slate-500 hover:text-rose-400 rounded-lg hover:bg-slate-800 transition-colors" title="Delete">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            ${(w.exercises || []).map(ex => `
+              <div class="bg-slate-850 p-3.5 rounded-2xl border border-slate-800 text-xs">
+                <span class="font-bold text-slate-200 block mb-1.5">${ex.name}</span>
+                <div class="flex flex-wrap gap-1.5">
+                  ${(ex.sets || []).map(s => `
+                    <span class="px-2.5 py-1 bg-slate-800 rounded-lg text-slate-300 font-mono text-[11px] border border-slate-700">
+                      Set ${s.setNum}: <strong class="text-emerald-400">${s.weight}${s.unit}</strong> x ${s.reps} ${s.note ? `(${s.note})` : ''}
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderRuns() {
+      const container = document.getElementById('runs-history-grid');
+      container.innerHTML = runs.map(r => `
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 flex flex-col justify-between shadow-md">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white text-base">${r.title}</span>
+              <span class="text-xs text-slate-400">${formatDate(r.completedAt)}</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 bg-slate-850 p-3 rounded-2xl border border-slate-800 text-center">
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Distance</span>
+                <span class="text-sm font-black text-indigo-400">${r.distanceKm} km</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Pace</span>
+                <span class="text-sm font-black text-amber-400">${r.paceMinPerKm}/km</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Energy</span>
+                <span class="text-sm font-black text-rose-400">${r.calories} kcal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function deleteWorkoutLog(id) {
+      workouts = workouts.filter(w => w.id !== id);
+      renderHistory();
+      showToast('Workout log removed.');
+    }
+
+    function renderPlanner() {
+      const grid = document.getElementById('planner-schedule-grid');
+      const todayIdx = new Date().getDay();
+      grid.innerHTML = WEEKLY_PLAN.map((p, idx) => {
+        const isToday = (todayIdx === (idx === 6 ? 0 : idx + 1));
+        return `
+          <div class="rounded-2xl p-4 border flex flex-col justify-between ${isToday ? 'bg-slate-850 border-emerald-500/80 ring-2 ring-emerald-500/20 shadow-lg' : p.rest ? 'bg-slate-900/50 border-slate-800 text-slate-400' : 'bg-slate-900 border-slate-800'}">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-white uppercase">${p.day}</span>
+                ${isToday ? '<span class="text-[10px] font-black px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 uppercase">Today</span>' : ''}
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-slate-100">${p.routineTitle}</h4>
+                <p class="text-[11px] text-slate-400 mt-0.5">${p.focus}</p>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800/80">
+              ${!p.rest ? `
+                <button onclick="startRoutine('${p.routineId}'); switchTab('active');" class="w-full py-1.5 px-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1">
+                  <i data-lucide="play" class="w-3 h-3 fill-current"></i>
+                  <span>Launch</span>
+                </button>
+              ` : `
+                <div class="text-center py-1.5 text-slate-500 text-[11px] font-medium flex items-center justify-center gap-1">
+                  <i data-lucide="heart" class="w-3 h-3 text-rose-400"></i>
+                  <span>Recovery</span>
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function renderAnalytics() {
+      let totalVol = 0;
+      let maxBench = 50;
+      let maxIncline = 50;
+      let maxSquat = 30;
+      let maxRDL = 30;
+      let maxRow = 50;
+
+      workouts.forEach(w => {
+        totalVol += (w.totalVolumeKg || 0);
+      });
+
+      const totalKm = runs.reduce((acc, r) => acc + (r.distanceKm || 0), 0);
+
+      document.getElementById('stat-total-workouts').innerText = workouts.length;
+      document.getElementById('stat-total-volume').innerText = totalVol.toLocaleString();
+      document.getElementById('stat-total-cardio').innerText = totalKm.toFixed(1);
+      document.getElementById('stat-bench-pr').innerText = `${maxBench} kg`;
+
+      document.getElementById('pr-bench').innerText = `${maxBench} kg`;
+      document.getElementById('pr-incline').innerText = `${maxIncline} kg`;
+      document.getElementById('pr-squat').innerText = `${maxSquat} kg`;
+      document.getElementById('pr-rdl').innerText = `${maxRDL} kg`;
+      document.getElementById('pr-row').innerText = `${maxRow} lbs`;
+    }
+
+    // --- STREAMING_CHUNK:Booting application on window load ---
+    window.onload = function() {
+      renderRoutineLauncher();
+      renderPlanner();
+      renderRuns();
+      renderHistory();
+      renderAnalytics();
+      lucide.createIcons();
+    };
+  </script>
+</body>
+</html>
